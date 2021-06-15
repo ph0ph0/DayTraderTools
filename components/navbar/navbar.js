@@ -1,10 +1,9 @@
 import { ReactNode } from "react";
+import Link from "next/link";
 import {
   Box,
   Flex,
-  Avatar,
   HStack,
-  Link,
   IconButton,
   Button,
   Menu,
@@ -18,9 +17,12 @@ import {
 } from "@chakra-ui/react";
 import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 
-const Links = ["Dashboard", "Projects", "Team"];
+const Links = [
+  { name: "Data Mining", slug: "data-mining" },
+  { name: "Vending Machines", slug: "vending-machines" },
+];
 
-const NavLink = ({ children }) => (
+const NavLink = ({ children, slug }) => (
   <Link
     px={2}
     py={1}
@@ -29,9 +31,9 @@ const NavLink = ({ children }) => (
       textDecoration: "none",
       bg: useColorModeValue("gray.200", "gray.700"),
     }}
-    href={"#"}
+    href={slug}
   >
-    {children}
+    {children.name}
   </Link>
 );
 
@@ -57,7 +59,9 @@ export default function NavBar() {
               display={{ base: "none", md: "flex" }}
             >
               {Links.map((link) => (
-                <NavLink key={link}>{link}</NavLink>
+                <NavLink key={link.key} slug={link.slug}>
+                  {link}
+                </NavLink>
               ))}
             </HStack>
           </HStack>
@@ -68,14 +72,7 @@ export default function NavBar() {
                 rounded={"full"}
                 variant={"link"}
                 cursor={"pointer"}
-              >
-                <Avatar
-                  size={"sm"}
-                  src={
-                    "https://images.unsplash.com/photo-1493666438817-866a91353ca9?ixlib=rb-0.3.5&q=80&fm=jpg&crop=faces&fit=crop&h=200&w=200&s=b616b2c5b373a80ffc9636ba24f7a4a9"
-                  }
-                />
-              </MenuButton>
+              ></MenuButton>
               <MenuList>
                 <MenuItem>Link 1</MenuItem>
                 <MenuItem>Link 2</MenuItem>
@@ -96,8 +93,6 @@ export default function NavBar() {
           </Box>
         ) : null}
       </Box>
-
-      <Box p={4}>Main Content Here</Box>
     </>
   );
 }
