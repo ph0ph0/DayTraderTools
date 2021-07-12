@@ -19,7 +19,7 @@ import { HamburgerIcon, CloseIcon } from "@chakra-ui/icons";
 
 const Links = [
   { name: "Data Mining", slug: "data-mining" },
-  { name: "Vending Machines", slug: "vending-machines" },
+  { name: "Vending Machines", slug: "/" },
 ];
 
 const NavLink = ({ children, slug }) => (
