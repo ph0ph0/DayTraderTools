@@ -1,32 +1,33 @@
-import React from 'react'
-import styled from 'styled-components'
+import React from "react";
+import styled from "styled-components";
 
-const SimpleButton = ({...props, api}) => {
-    return (
-        <div {...props}>
-            <button onClick={api.calculatePartials}/>
-        </div>
-    )
-}
+const SimpleButton = ({ api, ...props }) => {
+  return (
+    <div {...props}>
+      <button>Click Me</button>
+    </div>
+  );
+};
 
 const SimpleButtonWrapper = styled(SimpleButton)`
-    border: none;
-    font-size: 14px;
+  border: 1px solid red;
+  border: none;
+  font-size: 14px;
 
-    margin-left: 5px;
-    padding: 0px;
+  margin-left: 5px;
+  margin-top: 150px;
+  padding: 0px;
 
-    color: #05F22C;
-    background-color: #fff;
+  color: #05f22c;
+  background-color: #fff;
 
-    :hover {
-      cursor: pointer;
-    }
+  :hover {
+    cursor: pointer;
+  }
 
-    :focus {
-      outline: 0;
-    }
+  :focus {
+    outline: 0;
+  }
 `;
 
-
-export default SimpleButtonWrapper
+export default SimpleButtonWrapper;
