@@ -13,26 +13,41 @@ const IMAGE =
 
 export default function ProductSimple() {
   return (
-    <Box
+    <Center
+      // Container for the entire vending machine
       py={12}
       width="500px"
-      boxShadow={"outline"}
+      // boxShadow={"lg"}
       // border={"1px"}
       // borderColor={"gray.300"}
+      display="flex"
+      flexDirection="column"
+      alignContent={"flex-end"}
+      justifyContent={"flex-end"}
     >
+      <img
+        // The health thing at the top
+        src="/assets/PC_VendingMachineTop_SVG.svg"
+        alt="An SVG of an eye"
+        boxShadow={"outline"}
+        width={150}
+      />
       <Center
+        // The top red panel of the vending machine
         role={"group"}
         p={6}
         w={"full"}
         height={"150px"}
         bg={useColorModeValue("white", "gray.800")}
-        boxShadow={"outline"}
-        rounded={"lg"}
-        pos={"relative"}
+        boxShadow={"lg"}
+        // rounded={"lg"}
+        // pos={"relative"}
         zIndex={1}
         // border={"1px"}
         borderTopRightRadius={"50"}
         borderTopLeftRadius={"50"}
+        borderBottomLeftRadius={"0"}
+        borderBottomRightRadius={"0"}
         // borderColor={"gray.900"}
         bg={"red.400"}
         fontSize={"40"}
@@ -46,7 +61,54 @@ export default function ProductSimple() {
         </style>
         Partials Calculator
       </Center>
-    </Box>
+      <Center
+        // The middle panel of the vending machine. This contains the central panel and its components
+        role={"group"}
+        p={6}
+        w={"full"}
+        height={"500px"}
+        bg={useColorModeValue("white", "gray.800")}
+        // boxShadow={"outline"}
+        rounded={"lg"}
+        pos={"relative"}
+        zIndex={1}
+        border={"1px"}
+        borderColor={"red.400"}
+        borderTopRightRadius={"0"}
+        borderTopLeftRadius={"0"}
+        borderBottomLeftRadius={"5"}
+        borderBottomRightRadius={"5"}
+        // bg={"red.400"}
+        fontSize={"40"}
+        textAlign={"center"}
+        color={"whiteAlpha.700"}
+        fontFamily={"Monoton"}
+      >
+        <Center
+          // The central panel of the vending machine. This contains the inputs and button
+          role={"group"}
+          p={6}
+          w={"80%"}
+          height={"80%"}
+          bg={useColorModeValue("white", "gray.800")}
+          // boxShadow={"lg"}
+          // rounded={"lg"}
+          pos={"relative"}
+          zIndex={1}
+          border={"2px"}
+          borderColor={"gray.100"}
+          borderTopRightRadius={"50"}
+          borderTopLeftRadius={"50"}
+          borderBottomLeftRadius={"50"}
+          borderBottomRightRadius={"50"}
+          // bg={"red.400"}
+          fontSize={"40"}
+          textAlign={"center"}
+          color={"whiteAlpha.700"}
+          fontFamily={"Monoton"}
+        ></Center>
+      </Center>
+    </Center>
   );
 }
 
