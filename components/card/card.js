@@ -6,6 +6,7 @@ import {
   Text,
   Stack,
   Image,
+  Input,
 } from "@chakra-ui/react";
 
 const IMAGE =
@@ -106,7 +107,19 @@ export default function ProductSimple() {
           textAlign={"center"}
           color={"whiteAlpha.700"}
           fontFamily={"Monoton"}
-        ></Center>
+          flexDirection={"column"}
+        >
+          <Input placeholder={"Probability"} margin={3} />
+          <Input placeholder={"R Values"} margin={3} />
+          <Image
+            // The central button
+            src="/assets/PC_VendingMachineButton.svg"
+            alt="Vending Machine Button"
+            // boxShadow={"outline"}
+            width={100}
+            margin={3}
+          />
+        </Center>
       </Center>
     </Center>
   );

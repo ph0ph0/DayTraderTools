@@ -10,7 +10,6 @@ export default function Home() {
   return (
     <Flex borderWidth="1px" align="top" justifyContent="center">
       <Card />
-      <SimpleButton />
     </Flex>
   );
 }

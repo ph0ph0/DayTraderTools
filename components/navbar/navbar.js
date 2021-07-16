@@ -45,7 +45,7 @@ export default function NavBar() {
       <Box
         bg={useColorModeValue("gray.100", "gray.900")}
         px={4}
-        boxShadow={"outline"}
+        boxShadow={"lg"}
       >
         <Flex h={90} alignItems={"center"} justifyContent={"space-between"}>
           <IconButton
