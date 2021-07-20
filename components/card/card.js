@@ -8,6 +8,8 @@ import {
   Image,
   Input,
 } from "@chakra-ui/react";
+import VendingMachineWindowWrapper from "../primitive/vendingMachineWindow";
+import styled from "styled-components";
 
 const IMAGE =
   "https://previews.123rf.com/images/pamela4578/pamela45781810/pamela4578181000097/112030550-the-beautiful-red-spice-of-the-saffron-flower.jpg";
@@ -67,7 +69,7 @@ export default function ProductSimple() {
         role={"group"}
         p={6}
         w={"full"}
-        height={"500px"}
+        height={"750px"}
         bg={useColorModeValue("white", "gray.800")}
         // boxShadow={"outline"}
         rounded={"lg"}
@@ -119,6 +121,7 @@ export default function ProductSimple() {
             width={100}
             margin={3}
           />
+          <VendingMachineWindowWrapper />
         </Center>
       </Center>
     </Center>

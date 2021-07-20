@@ -5,6 +5,7 @@ import Layout from "../components/layout/layout";
 import Card from "../components/card/card";
 import SimpleButton from "../components/primitive/simpleButton";
 import { Box, Flex, HStack, Grid } from "@chakra-ui/react";
+import styled from "styled-components";
 
 export default function Home() {
   return (
