@@ -1,17 +1,31 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { motion } from "framer-motion";
+import { motion, useAnimation } from "framer-motion";
 
 const VendingMachineWindow = ({ ...props }) => {
+  const controls = useAnimation();
+
+  const onDragEnd = (event, info) => {
+    // if (info.point.x > 0 || info.point.x < 0) {
+    console.log("Resetting drag");
+    controls.start("beginning");
+    // }
+  };
+
+  const variants = {
+    beginning: { x: 0, y: 0 },
+  };
+
   return (
     <Container props={props}>
       <Circle
-        drag="x"
-        dragConstraints={{ left: -200, right: 200 }}
+        drag={true}
+        drag="y"
+        dragConstraints={{ top: 0, bottom: 0 }}
         whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 2 }}
-        initial={{ x: 0, y: 0 }}
-        onDragEnd={(event, info) => info.point.}
+        whileTap={{ scale: 1.2, cursor: "grabbing" }}
+        dragElastic={0.3}
+        dragTransition={{ bounceStiffness: 10000, bounceDamping: 10 }}
       />
     </Container>
   );
@@ -24,6 +38,7 @@ const Circle = styled(motion.div)`
   border-width: 5px;
   border-radius: 50%;
   border-color: black;
+  cursor: grab;
 `;
 const Container = styled.div`
   display: flex;
