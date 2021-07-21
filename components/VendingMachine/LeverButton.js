@@ -11,7 +11,6 @@ const LeverButton = ({ ...props }) => {
         // The central button
         src="/assets/PC_VendingMachineButton.svg"
         alt="Vending Machine Button"
-        // boxShadow={"outline"}
         width={100}
         margin={3}
         drag={true}
@@ -30,7 +29,7 @@ const LeverTrack = styled.div`
   position: absolute;
   width: 20px;
   height: 100px;
-  top: 150px;
+  top: 290px;
   background: gray;
   border-radius: 5px;
 `;

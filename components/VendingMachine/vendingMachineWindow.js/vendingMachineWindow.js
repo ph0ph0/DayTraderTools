@@ -1,37 +1,18 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
 import { motion, useAnimation } from "framer-motion";
+import { Center, Textarea } from "@chakra-ui/react";
 
 const VendingMachineWindow = ({ ...props }) => {
-  const controls = useAnimation();
-
-  const onDragEnd = (event, info) => {
-    // if (info.point.x > 0 || info.point.x < 0) {
-    console.log("Resetting drag");
-    controls.start("beginning");
-    // }
-  };
-
-  const variants = {
-    beginning: { x: 0, y: 0 },
-  };
-
   return (
-    <Container props={props}>
-      {/* <Circle
-        drag={true}
-        drag="y"
-        dragConstraints={{ top: 0, bottom: 0 }}
-        whileHover={{ scale: 1.1 }}
-        whileTap={{ scale: 1.2, cursor: "grabbing" }}
-        dragElastic={0}
-        dragTransition={{ bounceStiffness: 10000, bounceDamping: 10 }}
-      /> */}
-    </Container>
+    <Center>
+      <Textarea height={"50%"} resize={"none"} disabled top={"100px"} />
+      {/* <Circle></Circle> */}
+    </Center>
   );
 };
 
-const Circle = styled(motion.div)`
+const Circle = styled.div`
   height: 100px;
   width: 100px;
   border-style: solid;
