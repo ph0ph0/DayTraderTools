@@ -8,13 +8,13 @@ import {
   Image,
   Input,
 } from "@chakra-ui/react";
-import VendingMachineWindowWrapper from "../primitive/vendingMachineWindow";
-import styled from "styled-components";
+import VendingMachineWindowWrapper from "./vendingMachineWindow.js/vendingMachineWindow";
+import LeverButton from "./LeverButton";
 
 const IMAGE =
   "https://previews.123rf.com/images/pamela4578/pamela45781810/pamela4578181000097/112030550-the-beautiful-red-spice-of-the-saffron-flower.jpg";
 
-export default function ProductSimple() {
+export default function VendingMachine() {
   return (
     <Center
       // Container for the entire vending machine
@@ -113,14 +113,7 @@ export default function ProductSimple() {
         >
           <Input placeholder={"Probability"} margin={3} />
           <Input placeholder={"R Values"} margin={3} />
-          <Image
-            // The central button
-            src="/assets/PC_VendingMachineButton.svg"
-            alt="Vending Machine Button"
-            // boxShadow={"outline"}
-            width={100}
-            margin={3}
-          />
+          <LeverButton />
           <VendingMachineWindowWrapper />
         </Center>
       </Center>

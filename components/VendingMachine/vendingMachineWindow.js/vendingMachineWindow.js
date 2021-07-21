@@ -18,15 +18,15 @@ const VendingMachineWindow = ({ ...props }) => {
 
   return (
     <Container props={props}>
-      <Circle
+      {/* <Circle
         drag={true}
         drag="y"
         dragConstraints={{ top: 0, bottom: 0 }}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 1.2, cursor: "grabbing" }}
-        dragElastic={0.3}
+        dragElastic={0}
         dragTransition={{ bounceStiffness: 10000, bounceDamping: 10 }}
-      />
+      /> */}
     </Container>
   );
 };
