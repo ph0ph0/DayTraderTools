@@ -2,11 +2,11 @@ import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
 
-const LeverButton = ({ ...props }) => {
+const Lever = ({ ...props }) => {
   return (
     <>
       <LeverTrack />
-      <motion.img
+      <LeverButton
         {...props}
         // The central button
         src="/assets/PC_VendingMachineButton.svg"
@@ -29,12 +29,16 @@ const LeverTrack = styled.div`
   position: absolute;
   width: 20px;
   height: 100px;
-  top: 290px;
+  top: 300px;
   background: gray;
   border-radius: 5px;
   z-index: -1;
 `;
 
-const LeverButtonWrapper = styled(LeverButton)``;
+const LeverButton = styled(motion.img)`
+  margin-top: 75px;
+`;
+
+const LeverButtonWrapper = styled(Lever)``;
 
 export default LeverButtonWrapper;

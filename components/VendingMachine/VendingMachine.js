@@ -110,10 +110,12 @@ export default function VendingMachine() {
           textAlign={"center"}
           color={"whiteAlpha.700"}
           fontFamily={"Monoton"}
-          display={flex}
+          display={"flex"}
           flexDirection={"column"}
+          justifyContent={"flex-start"}
+          alignItems={"center"}
         >
-          <Input placeholder={"Probability"} margin={3} />
+          <Input placeholder={"Probability"} margin={30} />
           <Input placeholder={"R Values"} margin={3} />
           <LeverButton />
           <VendingMachineWindowWrapper />
