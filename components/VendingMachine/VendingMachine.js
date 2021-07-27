@@ -8,8 +8,9 @@ import {
   Image,
   Input,
 } from "@chakra-ui/react";
-import VendingMachineWindowWrapper from "./vendingMachineWindow.js/vendingMachineWindow";
+import VendingMachineWindowWrapper from "./vendingMachineWindow/VendingMachineWindow";
 import LeverButton from "./LeverButton";
+import styled from "styled-components";
 
 const IMAGE =
   "https://previews.123rf.com/images/pamela4578/pamela45781810/pamela4578181000097/112030550-the-beautiful-red-spice-of-the-saffron-flower.jpg";
@@ -69,7 +70,7 @@ export default function VendingMachine() {
         role={"group"}
         p={6}
         w={"full"}
-        height={"750px"}
+        height={"1000px"}
         bg={useColorModeValue("white", "gray.800")}
         // boxShadow={"outline"}
         rounded={"lg"}
@@ -87,7 +88,7 @@ export default function VendingMachine() {
         color={"whiteAlpha.700"}
         fontFamily={"Monoton"}
       >
-        <Center
+        <Box
           // The central panel of the vending machine. This contains the inputs and button
           role={"group"}
           p={6}
@@ -109,13 +110,14 @@ export default function VendingMachine() {
           textAlign={"center"}
           color={"whiteAlpha.700"}
           fontFamily={"Monoton"}
+          display={flex}
           flexDirection={"column"}
         >
           <Input placeholder={"Probability"} margin={3} />
           <Input placeholder={"R Values"} margin={3} />
           <LeverButton />
           <VendingMachineWindowWrapper />
-        </Center>
+        </Box>
       </Center>
     </Center>
   );

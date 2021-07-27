@@ -1,15 +1,13 @@
 import React from "react";
 import styled, { keyframes } from "styled-components";
-import { motion, useAnimation } from "framer-motion";
-import { Center, Textarea } from "@chakra-ui/react";
+import { motion, useAnimation, useMotionValue } from "framer-motion";
 
 const VendingMachineWindow = ({ ...props }) => {
-  return (
-    <Center>
-      <Textarea height={"50%"} resize={"none"} disabled top={"100px"} />
-      {/* <Circle></Circle> */}
-    </Center>
-  );
+  const x = useMotionValue(500);
+
+  const y = true;
+
+  return <Window animate={{ height: y ? "100px" : "10px" }} />;
 };
 
 const Circle = styled.div`
@@ -27,6 +25,14 @@ const Container = styled.div`
   justify-content: center;
   flex-direction: column;
   height: 450px;
+`;
+
+const Window = styled(motion.div)`
+  width: 200px;
+  height: 200px;
+  border-color: red;
+  border-width: 2px;
+  background-color: green;
 `;
 
 // const WindowWrapper = styled(Window)``;

@@ -32,6 +32,7 @@ const LeverTrack = styled.div`
   top: 290px;
   background: gray;
   border-radius: 5px;
+  z-index: -1;
 `;
 
 const LeverButtonWrapper = styled(LeverButton)``;
