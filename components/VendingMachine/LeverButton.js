@@ -28,15 +28,17 @@ const Lever = ({ ...props }) => {
 const LeverTrack = styled.div`
   position: absolute;
   width: 20px;
-  height: 100px;
-  top: 300px;
+  height: 130px;
+  top: 170px;
   background: gray;
   border-radius: 5px;
   z-index: -1;
 `;
 
 const LeverButton = styled(motion.img)`
-  margin-top: 75px;
+  margin-top: 20px;
+  z-index: 10;
+  /* visibility: hidden; */
 `;
 
 const LeverButtonWrapper = styled(Lever)``;

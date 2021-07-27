@@ -11,6 +11,7 @@ import {
 import VendingMachineWindowWrapper from "./vendingMachineWindow/VendingMachineWindow";
 import LeverButton from "./LeverButton";
 import styled from "styled-components";
+import StyledInputWrapper from "../primitive/Inputs";
 
 const IMAGE =
   "https://previews.123rf.com/images/pamela4578/pamela45781810/pamela4578181000097/112030550-the-beautiful-red-spice-of-the-saffron-flower.jpg";
@@ -59,10 +60,6 @@ export default function VendingMachine() {
         color={"whiteAlpha.700"}
         fontFamily={"Monoton"}
       >
-        <style>
-          @import
-          url('https://fonts.googleapis.com/css2?family=Monoton&display=swap');
-        </style>
         Partials Calculator
       </Center>
       <Center
@@ -70,7 +67,7 @@ export default function VendingMachine() {
         role={"group"}
         p={6}
         w={"full"}
-        height={"1000px"}
+        height={"700px"}
         bg={useColorModeValue("white", "gray.800")}
         // boxShadow={"outline"}
         rounded={"lg"}
@@ -93,7 +90,7 @@ export default function VendingMachine() {
           role={"group"}
           p={6}
           w={"80%"}
-          height={"80%"}
+          height={"95%"}
           bg={useColorModeValue("white", "gray.800")}
           // boxShadow={"lg"}
           // rounded={"lg"}
@@ -115,8 +112,8 @@ export default function VendingMachine() {
           justifyContent={"flex-start"}
           alignItems={"center"}
         >
-          <Input placeholder={"Probability"} margin={30} />
-          <Input placeholder={"R Values"} margin={3} />
+          <StyledInputWrapper placeholder={"Probability"} />
+          <StyledInputWrapper placeholder={"R Values"} />
           <LeverButton />
           <VendingMachineWindowWrapper />
         </Box>

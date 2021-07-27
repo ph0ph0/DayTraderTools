@@ -15,6 +15,7 @@ const VendingMachineWindow = ({ ...props }) => {
           height: isOpen ? "10px" : "200px",
           transition: { duration: 3, ease: "anticipate" },
         }}
+        initial={{ height: "200px" }}
       />
       <ResultBucket resize={"none"} disabled>
         Hey there!
@@ -24,12 +25,13 @@ const VendingMachineWindow = ({ ...props }) => {
 };
 
 const WindowHolder = styled(Center)`
-  margin-top: 75px;
+  margin-top: 70px;
   height: 200px;
   /* background-color: blue; */
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
+  /* margin-bottom: 50px; */
 `;
 
 // #d9e7fc
@@ -51,7 +53,7 @@ const ResultBucket = styled(Textarea)`
   margin-top: 0px;
   width: 250px;
   height: 200px;
-  background-color: #889ec2;
+  background-color: #d9e0fa;
   position: absolute;
   z-index: 1;
   border-radius: 5px;
@@ -64,6 +66,7 @@ const ResultBucket = styled(Textarea)`
   }
   padding-top: 20px;
   font-family: Arial, Helvetica, sans-serif;
+  color: black;
 `;
 
 const VendingMachineWindowWrapper = styled(VendingMachineWindow)``;
