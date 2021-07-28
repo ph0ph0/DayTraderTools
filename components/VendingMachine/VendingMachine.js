@@ -130,7 +130,7 @@ export default function VendingMachine() {
             value={api.rValues}
             onChange={(event) => api.updateRValues(event.target.value)}
           />
-          <LeverButton />
+          <LeverButton api={api} />
           <VendingMachineWindowWrapper />
         </Box>
       </Center>

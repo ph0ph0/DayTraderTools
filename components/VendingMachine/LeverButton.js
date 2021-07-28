@@ -2,12 +2,13 @@ import { React, useEffect } from "react";
 import styled from "styled-components";
 import { motion, useMotionValue } from "framer-motion";
 
-const Lever = ({ ...props }) => {
+const Lever = ({ api, ...props }) => {
   const x = useMotionValue(0);
 
   const onDragEnd = (_, info) => {
     if (info.point.y > 900) {
       window.log("HIT");
+      api.submitData();
     }
   };
 
