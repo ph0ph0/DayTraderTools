@@ -18,7 +18,7 @@ const Lever = ({ api, ...props }) => {
       <LeverButton
         {...props}
         // The central button
-        src="/assets/PC_VendingMachineButton.svg"
+        src="/assets/PC_VendingMachineButton_8.png"
         alt="Vending Machine Button"
         width={100}
         margin={3}

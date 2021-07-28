@@ -40,7 +40,7 @@ export default function VendingMachine() {
     >
       <img
         // The health thing at the top
-        src="/assets/PC_VendingMachineTop_SVG.svg"
+        src="/assets/PC_VendingMachineTop_SVG_3.svg"
         alt="An SVG of an eye"
         boxShadow={"outline"}
         width={150}
@@ -62,7 +62,7 @@ export default function VendingMachine() {
         borderBottomLeftRadius={"0"}
         borderBottomRightRadius={"0"}
         // borderColor={"gray.900"}
-        bg={"#85bb65"}
+        bg={"#232121"}
         fontSize={"40"}
         textAlign={"center"}
         color={"whiteAlpha.700"}
@@ -82,7 +82,7 @@ export default function VendingMachine() {
         pos={"relative"}
         zIndex={1}
         border={"1px"}
-        borderColor={"#85bb65"}
+        borderColor={"#232121"}
         borderTopRightRadius={"0"}
         borderTopLeftRadius={"0"}
         borderBottomLeftRadius={"5"}
@@ -131,7 +131,7 @@ export default function VendingMachine() {
             onChange={(event) => api.updateRValues(event.target.value)}
           />
           <LeverButton api={api} />
-          <VendingMachineWindowWrapper />
+          <VendingMachineWindowWrapper api={api} />
         </Box>
       </Center>
     </Center>

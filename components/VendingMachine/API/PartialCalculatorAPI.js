@@ -1,9 +1,16 @@
 const PartialCalculatorAPI = ({ state, setState }) => {
   const rValues = state.rValues;
   const probabilities = state.probabilities;
+  const windowIsOpen = state.windowIsOpen;
 
   const submitData = () => {
-    window.log("Calculating Partials...");
+    window.log(`Calculating partials for p: ${probabilities}, r: ${rValues}`);
+    setState((prevState) => {
+      return {
+        ...prevState,
+        windowIsOpen: !windowIsOpen,
+      };
+    });
   };
 
   const updateRValues = (newValue) => {
@@ -26,9 +33,19 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     });
   };
 
+  const switchWindow = () => {
+    setState((prevState) => {
+      return {
+        ...prevState,
+        windowIsOpen: !windowIsOpen,
+      };
+    });
+  };
+
   return {
     rValues,
     probabilities,
+    windowIsOpen,
     updateRValues,
     updateProbabilities,
     submitData,

@@ -3,16 +3,14 @@ import styled, { keyframes } from "styled-components";
 import { motion, useAnimation, useMotionValue } from "framer-motion";
 import { Center, Textarea } from "@chakra-ui/react";
 
-const VendingMachineWindow = ({ ...props }) => {
+const VendingMachineWindow = ({ api, ...props }) => {
   const x = useMotionValue(500);
-
-  const isOpen = false;
 
   return (
     <WindowHolder>
       <Window
         animate={{
-          height: isOpen ? "10px" : "200px",
+          height: api.windowIsOpen ? "10px" : "200px",
           transition: { duration: 3, ease: "anticipate" },
         }}
       />
@@ -22,7 +20,7 @@ const VendingMachineWindow = ({ ...props }) => {
 };
 
 const WindowHolder = styled(Center)`
-  margin-top: 70px;
+  margin-top: 120px;
   height: 200px;
   /* background-color: blue; */
   display: flex;
