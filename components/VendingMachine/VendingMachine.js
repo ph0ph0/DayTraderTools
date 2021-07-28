@@ -13,10 +13,18 @@ import LeverButton from "./LeverButton";
 import styled from "styled-components";
 import StyledInputWrapper from "../primitive/Inputs";
 
+import PartialCalculatorAPI from "./API/PartialCalculatorAPI";
+import useAPI from "../../customHooks/useAPI";
+
 const IMAGE =
   "https://previews.123rf.com/images/pamela4578/pamela45781810/pamela4578181000097/112030550-the-beautiful-red-spice-of-the-saffron-flower.jpg";
 
 export default function VendingMachine() {
+  const api = useAPI(PartialCalculatorAPI, {
+    rValues: "",
+    probabilities: "",
+  });
+
   return (
     <Center
       // Container for the entire vending machine
@@ -38,7 +46,7 @@ export default function VendingMachine() {
         width={150}
       />
       <Center
-        // The top red panel of the vending machine
+        // The top green panel of the vending machine
         role={"group"}
         p={6}
         w={"full"}
@@ -54,7 +62,7 @@ export default function VendingMachine() {
         borderBottomLeftRadius={"0"}
         borderBottomRightRadius={"0"}
         // borderColor={"gray.900"}
-        bg={"red.400"}
+        bg={"#85bb65"}
         fontSize={"40"}
         textAlign={"center"}
         color={"whiteAlpha.700"}
@@ -74,7 +82,7 @@ export default function VendingMachine() {
         pos={"relative"}
         zIndex={1}
         border={"1px"}
-        borderColor={"red.400"}
+        borderColor={"#85bb65"}
         borderTopRightRadius={"0"}
         borderTopLeftRadius={"0"}
         borderBottomLeftRadius={"5"}
@@ -112,8 +120,16 @@ export default function VendingMachine() {
           justifyContent={"flex-start"}
           alignItems={"center"}
         >
-          <StyledInputWrapper placeholder={"Probability"} />
-          <StyledInputWrapper placeholder={"R Values"} />
+          <StyledInputWrapper
+            placeholder={"Probability"}
+            value={api.probabilities}
+            onChange={(event) => api.updateProbabilities(event.target.value)}
+          />
+          <StyledInputWrapper
+            placeholder={"R Values"}
+            value={api.rValues}
+            onChange={(event) => api.updateRValues(event.target.value)}
+          />
           <LeverButton />
           <VendingMachineWindowWrapper />
         </Box>

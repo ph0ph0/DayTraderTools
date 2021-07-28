@@ -1,5 +1,4 @@
 import { createGlobalStyle } from "styled-components";
-import { Monotron, RobotoLight } from "./fonts";
 
 export default createGlobalStyle`
     @font-face {

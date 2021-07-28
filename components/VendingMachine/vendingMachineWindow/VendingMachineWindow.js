@@ -6,7 +6,7 @@ import { Center, Textarea } from "@chakra-ui/react";
 const VendingMachineWindow = ({ ...props }) => {
   const x = useMotionValue(500);
 
-  const isOpen = true;
+  const isOpen = false;
 
   return (
     <WindowHolder>
@@ -15,11 +15,8 @@ const VendingMachineWindow = ({ ...props }) => {
           height: isOpen ? "10px" : "200px",
           transition: { duration: 3, ease: "anticipate" },
         }}
-        initial={{ height: "200px" }}
       />
-      <ResultBucket resize={"none"} disabled>
-        Hey there!
-      </ResultBucket>
+      <ResultBucket resize={"none"} disabled></ResultBucket>
     </WindowHolder>
   );
 };

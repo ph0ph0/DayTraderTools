@@ -1,8 +1,16 @@
-import React from "react";
+import { React, useEffect } from "react";
 import styled from "styled-components";
-import { motion } from "framer-motion";
+import { motion, useMotionValue } from "framer-motion";
 
 const Lever = ({ ...props }) => {
+  const x = useMotionValue(0);
+
+  const onDragEnd = (_, info) => {
+    if (info.point.y > 900) {
+      window.log("HIT");
+    }
+  };
+
   return (
     <>
       <LeverTrack />
@@ -20,6 +28,7 @@ const Lever = ({ ...props }) => {
         whileTap={{ scale: 0.9, cursor: "grabbing" }}
         dragElastic={{ top: 0, bottom: 0.2 }}
         dragTransition={{ bounceStiffness: 10000, bounceDamping: 10 }}
+        onDragEnd={onDragEnd}
       />
     </>
   );
