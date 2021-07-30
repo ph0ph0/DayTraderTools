@@ -23,6 +23,7 @@ export default function VendingMachine() {
   const api = useAPI(PartialCalculatorAPI, {
     rValues: "",
     probabilities: "",
+    windowIsOpen: false,
   });
 
   return (

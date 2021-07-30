@@ -1,4 +1,4 @@
-import useEndpoint from "../../../customHooks/useEndpoint";
+import { useEndpoint } from "../../../customHooks/useEndpoint";
 
 const PartialCalculatorAPI = ({ state, setState }) => {
   const rValues = state.rValues;

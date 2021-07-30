@@ -1,7 +1,7 @@
 import { useState } from "react";
 import axios from "axios";
 
-const useEndpoint = () => {
+export const useEndpoint = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -19,5 +19,3 @@ const useEndpoint = () => {
     postEndpoint,
   };
 };
-
-export default useEndpoint;
