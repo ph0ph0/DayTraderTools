@@ -66,4 +66,6 @@ const ResultBucket = styled(Textarea)`
 
 const VendingMachineWindowWrapper = styled(VendingMachineWindow)``;
 
+VendingMachineWindowWrapper.displayName = "VendingMachineWindow";
+
 export default VendingMachineWindowWrapper;

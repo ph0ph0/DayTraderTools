@@ -53,4 +53,5 @@ const LeverButton = styled(motion.img)`
 
 const LeverButtonWrapper = styled(Lever)``;
 
+LeverButtonWrapper.displayName = "LeverButton";
 export default LeverButtonWrapper;

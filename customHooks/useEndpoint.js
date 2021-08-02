@@ -6,16 +6,23 @@ export const useEndpoint = () => {
   const [error, setError] = useState(null);
 
   const postEndpoint = async (url, data) => {
-    window.log(`Hitting endpoint!`);
-    const result = await axios.post(url, data);
-    window.log(`response: ${result}`);
+    try {
+      setLoading(true);
+      const response = await axios.post(url, data, headers);
+      window.log(`Response: ${JSON.stringify(response)}`);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      window.log(`Error hitting API: ${error}`);
+    }
   };
 
   return {
     loading,
     error,
-    setLoading,
-    setError,
     postEndpoint,
   };
 };
+
+// export default useEndpoint;

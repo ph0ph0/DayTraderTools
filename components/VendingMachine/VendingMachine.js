@@ -14,7 +14,7 @@ import styled from "styled-components";
 import StyledInputWrapper from "../primitive/Inputs";
 
 import PartialCalculatorAPI from "./API/PartialCalculatorAPI";
-import useAPI from "../../customHooks/useAPI";
+import useAPI from "../../CustomHooks/useAPI";
 
 const IMAGE =
   "https://previews.123rf.com/images/pamela4578/pamela45781810/pamela4578181000097/112030550-the-beautiful-red-spice-of-the-saffron-flower.jpg";
@@ -24,6 +24,8 @@ export default function VendingMachine() {
     rValues: "",
     probabilities: "",
     windowIsOpen: false,
+    loading: false,
+    error: null,
   });
 
   return (
