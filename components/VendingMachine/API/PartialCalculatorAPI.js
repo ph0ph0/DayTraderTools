@@ -1,5 +1,6 @@
 import axios from "axios";
 import { poll, validatePollingResponse } from "../helpers/PollingFunctions";
+import { v4 as uuidv4 } from "uuid";
 
 const PartialCalculatorAPI = ({ state, setState }) => {
   const rValues = state.rValues;
@@ -35,13 +36,15 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     const pollingURL =
       "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/pollingresource";
 
+    //trim the white space either side of the strings, convert to floats.
+
+    const objectId = uuidv4();
     const dataInputs = {
-      id: "1010",
-      R: [2, 4],
-      P_AtR: [80, 57],
+      id: objectId,
+      R: [2, 4, 6, 8],
+      P_AtR: [80, 57, 60, 20],
       total_shares: 1000,
     };
-
     const headers = {
       "Content-Type": "application/json",
     };
@@ -73,22 +76,28 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     window.log(`Now looking to poll with id: ${queryID}`);
     // Now poll the backend until we get a response.
 
+    const queryIdObject = { id: queryID };
     const queryBackend = async () => {
-      await axios.post(pollingURL, queryID, headers);
+      try {
+        window.log(`querying backend: ${JSON.stringify(queryIdObject)}`);
+        return await axios.post(pollingURL, queryIdObject, headers);
+      } catch (error) {
+        throw new Error(`Error calling axios post: ${error}`);
+      }
     };
 
     try {
       const partialCalculatorResult = await poll(
         queryBackend,
         validatePollingResponse,
-        15
+        20
+      );
+      window.log(
+        `PartialCalculatorResult: ${JSON.stringify(partialCalculatorResult)}`
       );
     } catch (error) {
       window.log(`Error polling: ${error}`);
     }
-
-    window.log(`PartialCalculatorResult: ${partialCalculatorResult}`);
-
     setState((prevState) => {
       return {
         ...prevState,

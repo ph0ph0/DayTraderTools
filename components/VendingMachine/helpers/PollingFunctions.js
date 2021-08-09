@@ -9,7 +9,7 @@ export const poll = async (fn, validate, maxAttempts) => {
     interval = attempts * 500;
     try {
       result = await fn();
-      window.log(`Result from poll: ${result}`);
+      window.log(`Result: ${JSON.stringifyresult}`);
     } catch (error) {
       window.log(`Error running polling query ${error}`);
       return reject(error);
@@ -31,6 +31,12 @@ export const poll = async (fn, validate, maxAttempts) => {
 };
 
 export const validatePollingResponse = (response) => {
-  if (response === undefined) return false;
-  return true;
+  if (response === undefined) {
+    return false;
+  }
+  if (response.data.body[0].calculationStatus == "finished") {
+    return true;
+  }
+
+  return false;
 };
