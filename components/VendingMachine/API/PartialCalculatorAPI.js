@@ -37,6 +37,15 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/pollingresource";
 
     //trim the white space either side of the strings, convert to floats.
+    // Convert comma separated values into an array of floats.
+
+    // Check input values
+
+    if (!Array(rValues.split(","))) {
+      window.log(`*!*!*!*!*!*!*!*`);
+    }
+    window.log(`length: ${rValues}`);
+    return;
 
     const objectId = uuidv4();
     const dataInputs = {
@@ -108,22 +117,28 @@ const PartialCalculatorAPI = ({ state, setState }) => {
 
   const updateRValues = (newValue) => {
     window.log(`new R Value text: ${newValue}`);
-    setState((prevState) => {
-      return {
-        ...prevState,
-        rValues: newValue,
-      };
-    });
+    const re = /^[0-9 ,\b]+$/;
+    if (newValue === "" || re.test(newValue)) {
+      setState((prevState) => {
+        return {
+          ...prevState,
+          rValues: newValue,
+        };
+      });
+    }
   };
 
   const updateProbabilities = (newValue) => {
     window.log(`new probabilities text: ${newValue}`);
-    setState((prevState) => {
-      return {
-        ...prevState,
-        probabilities: newValue,
-      };
-    });
+    const re = /^[0-9 ,\b]+$/;
+    if (newValue === "" || re.test(newValue)) {
+      setState((prevState) => {
+        return {
+          ...prevState,
+          probabilities: newValue,
+        };
+      });
+    }
   };
 
   const switchWindow = () => {
