@@ -7,4 +7,6 @@ const Layout = ({ children }) => (
     {children}
   </div>
 );
+
+Layout.displayName = "Layout";
 export default Layout;

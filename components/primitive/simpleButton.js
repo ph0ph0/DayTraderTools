@@ -29,5 +29,5 @@ const SimpleButtonWrapper = styled(SimpleButton)`
     outline: 0;
   }
 `;
-
+SimpleButtonWrapper.displayName = "SimpleButton";
 export default SimpleButtonWrapper;

@@ -16,4 +16,5 @@ const StyledInputWrapper = styled(StyledInput)`
   margin-top: 20px;
 `;
 
+StyledInputWrapper.displayName = "StyledInput";
 export default StyledInputWrapper;

@@ -37,6 +37,8 @@ const NavLink = ({ children, slug }) => (
   </Link>
 );
 
+NavLink.displayName = "NavLink";
+
 export default function NavBar() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 

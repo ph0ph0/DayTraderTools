@@ -27,6 +27,93 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     });
   };
 
+  const checkRValues = (rVals) => {
+    const rValueArrayStrings = rVals.trim().split(",");
+    if (!rVals.includes(",")) {
+      window.log(`No comma in R vals`);
+      setError("Please provide a comma separated list eg 2, 3, 4");
+      return false;
+    }
+    if (rValueArrayStrings.length <= 1) {
+      window.log(`Please provide more than one value, separated by commas`);
+      setError("Please provide more than one value, separated by commas");
+      return false;
+    }
+    if (rValueArrayStrings.length > 4) {
+      window.log(
+        `rValue array too long, aborting: ${rValueArrayStrings.length}`
+      );
+      setError(
+        "R Values array is too long, please provide a maximum of 4 entries"
+      );
+      return false;
+    }
+    const rValueArrayFloat = rValueArrayStrings.map((value) =>
+      parseFloat(value)
+    );
+    window.log(`Float array: ${rValueArrayFloat}`);
+    for (let i = 0; i <= rValueArrayFloat.length; i++) {
+      if (rValueArrayFloat[i] === false || Number.isNaN(rValueArrayFloat[i])) {
+        window.log(`Please ensure that there are no trailing commas`);
+        setError("Please ensure that there are no trailing commas");
+        return;
+      }
+      if (i == 0) continue;
+      if (rValueArrayFloat[i] < rValueArrayFloat[i - 1]) {
+        window.log(`R Values should increase from left to right`);
+        setError("R Values should increase from left to right");
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const checkProbabilities = (probs) => {
+    const probabilityArrayStrings = probs.trim().split(",");
+    if (!probs.includes(",")) {
+      window.log(`No comma in probabilities`);
+      setError("Please provide a comma separated list eg 2, 3, 4");
+      return false;
+    }
+    if (probabilityArrayStrings.length <= 1) {
+      window.log(
+        `${"Please provide more than one value, separated by commas"}`
+      );
+      setError("Please provide more than one value, separated by commas");
+      return false;
+    }
+    if (probabilityArrayStrings.length > 4) {
+      window.log(
+        `rValue array too long, aborting: ${probabilityArrayStrings.length}`
+      );
+      setError(
+        "R Values array is too long, please provide a maximum of 4 entries"
+      );
+      return false;
+    }
+    const probabilityArrayFloat = probabilityArrayStrings.map((value) =>
+      parseFloat(value)
+    );
+    window.log(`Float array: ${probabilityArrayFloat}`);
+    for (let i = 0; i <= probabilityArrayFloat.length; i++) {
+      if (
+        probabilityArrayFloat[i] === false ||
+        Number.isNaN(probabilityArrayFloat[i])
+      ) {
+        window.log(`Please ensure that there are no trailing commas`);
+        setError("Please ensure that there are no trailing commas");
+        return;
+      }
+      if (i == 0) continue;
+      if (probabilityArrayFloat[i] < probabilityArrayFloat[i - 1]) {
+        window.log(`Probabilities should decrease from left to right`);
+        setError("R Values should increase from left to right");
+        return false;
+      }
+    }
+    return true;
+  };
+
   const submitData = async () => {
     window.log(`Calculating partials for p: ${probabilities}, r: ${rValues}`);
 
@@ -40,11 +127,21 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     // Convert comma separated values into an array of floats.
 
     // Check input values
-
-    if (!Array(rValues.split(","))) {
-      window.log(`*!*!*!*!*!*!*!*`);
+    if (!checkProbabilities(probabilities) || !checkRValues(rValues)) return;
+    const rValueArrayStrings = rValues.split(",");
+    const rFloats = rValueArrayStrings.map((value) => parseFloat(value));
+    const probabilityArrayStrings = probabilities.split(",");
+    const probFloats = probabilityArrayStrings.map((value) =>
+      parseFloat(value)
+    );
+    window.log(`rFloats: ${rFloats} ; probs: ${probFloats}`);
+    if (probFloats.length != rFloats) {
+      setError(
+        "Please ensure that you have the same number of R Values as Probabilities"
+      );
+      return;
     }
-    window.log(`length: ${rValues}`);
+    // Check that the lengths of the two array are the same
     return;
 
     const objectId = uuidv4();
