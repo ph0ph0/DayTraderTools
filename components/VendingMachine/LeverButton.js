@@ -39,7 +39,7 @@ const LeverTrack = styled.div`
   position: absolute;
   width: 20px;
   height: 130px;
-  top: 170px;
+  top: 194px;
   background: gray;
   border-radius: 5px;
   z-index: -1;

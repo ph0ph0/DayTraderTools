@@ -7,17 +7,24 @@ import {
   Stack,
   Image,
   Input,
+  Tooltip,
 } from "@chakra-ui/react";
 import VendingMachineWindowWrapper from "./vendingMachineWindow/VendingMachineWindow";
 import LeverButton from "./LeverButton";
 import styled from "styled-components";
 import StyledInputWrapper from "../primitive/Inputs";
+import ErrorText from "../primitive/ErrorText";
+import NotificationText from "../primitive/NotificationText";
 
 import PartialCalculatorAPI from "./API/PartialCalculatorAPI";
 import useAPI from "../../CustomHooks/useAPI";
+import InfoModal from "./InfoModal";
 
 const IMAGE =
   "https://previews.123rf.com/images/pamela4578/pamela45781810/pamela4578181000097/112030550-the-beautiful-red-spice-of-the-saffron-flower.jpg";
+
+const label =
+  "ab43576767879686798ab43576767879686798ab43576767879686798ab43576767879686798ab43576767879686798ab43576767879686798ab43576767879686798ab43576767879686798ab43576767879686798ab43576767879686798";
 
 export default function VendingMachine() {
   const api = useAPI(PartialCalculatorAPI, {
@@ -26,7 +33,10 @@ export default function VendingMachine() {
     windowIsOpen: false,
     loading: false,
     error: null,
+    notification: null,
   });
+
+  const InfoToolTip = "";
 
   return (
     <Center
@@ -123,17 +133,23 @@ export default function VendingMachine() {
           justifyContent={"flex-start"}
           alignItems={"center"}
         >
-          <StyledInputWrapper
-            placeholder={"Probability"}
-            value={api.probabilities}
-            onChange={(event) => api.updateProbabilities(event.target.value)}
-          />
+          {/* The Help Icon */}
+          <InfoModal></InfoModal>
           <StyledInputWrapper
             placeholder={"R Values"}
             value={api.rValues}
             onChange={(event) => api.updateRValues(event.target.value)}
           />
+          <StyledInputWrapper
+            placeholder={"Probability"}
+            value={api.probabilities}
+            onChange={(event) => api.updateProbabilities(event.target.value)}
+          />
           <LeverButton api={api} />
+          {api.notification && (
+            <NotificationText>{api.notification}</NotificationText>
+          )}
+          {api.error && <ErrorText>{api.error}</ErrorText>}
           <VendingMachineWindowWrapper api={api} />
         </Box>
       </Center>

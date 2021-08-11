@@ -8,6 +8,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
   const windowIsOpen = state.windowIsOpen;
   const loading = state.loading;
   const error = state.error;
+  const notification = state.notification;
 
   const setLoading = (value) => {
     setState((prevState) => {
@@ -26,96 +27,29 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       };
     });
   };
-
-  const checkRValues = (rVals) => {
-    const rValueArrayStrings = rVals.trim().split(",");
-    if (!rVals.includes(",")) {
-      window.log(`No comma in R vals`);
-      setError("Please provide a comma separated list eg 2, 3, 4");
-      return false;
-    }
-    if (rValueArrayStrings.length <= 1) {
-      window.log(`Please provide more than one value, separated by commas`);
-      setError("Please provide more than one value, separated by commas");
-      return false;
-    }
-    if (rValueArrayStrings.length > 4) {
-      window.log(
-        `rValue array too long, aborting: ${rValueArrayStrings.length}`
-      );
-      setError(
-        "R Values array is too long, please provide a maximum of 4 entries"
-      );
-      return false;
-    }
-    const rValueArrayFloat = rValueArrayStrings.map((value) =>
-      parseFloat(value)
-    );
-    window.log(`Float array: ${rValueArrayFloat}`);
-    for (let i = 0; i <= rValueArrayFloat.length; i++) {
-      if (rValueArrayFloat[i] === false || Number.isNaN(rValueArrayFloat[i])) {
-        window.log(`Please ensure that there are no trailing commas`);
-        setError("Please ensure that there are no trailing commas");
-        return;
-      }
-      if (i == 0) continue;
-      if (rValueArrayFloat[i] < rValueArrayFloat[i - 1]) {
-        window.log(`R Values should increase from left to right`);
-        setError("R Values should increase from left to right");
-        return false;
-      }
-    }
-    return true;
+  const setNotification = (value) => {
+    setState((prevState) => {
+      return {
+        ...prevState,
+        notification: value,
+      };
+    });
   };
 
-  const checkProbabilities = (probs) => {
-    const probabilityArrayStrings = probs.trim().split(",");
-    if (!probs.includes(",")) {
-      window.log(`No comma in probabilities`);
-      setError("Please provide a comma separated list eg 2, 3, 4");
-      return false;
-    }
-    if (probabilityArrayStrings.length <= 1) {
-      window.log(
-        `${"Please provide more than one value, separated by commas"}`
-      );
-      setError("Please provide more than one value, separated by commas");
-      return false;
-    }
-    if (probabilityArrayStrings.length > 4) {
-      window.log(
-        `rValue array too long, aborting: ${probabilityArrayStrings.length}`
-      );
-      setError(
-        "R Values array is too long, please provide a maximum of 4 entries"
-      );
-      return false;
-    }
-    const probabilityArrayFloat = probabilityArrayStrings.map((value) =>
-      parseFloat(value)
-    );
-    window.log(`Float array: ${probabilityArrayFloat}`);
-    for (let i = 0; i <= probabilityArrayFloat.length; i++) {
-      if (
-        probabilityArrayFloat[i] === false ||
-        Number.isNaN(probabilityArrayFloat[i])
-      ) {
-        window.log(`Please ensure that there are no trailing commas`);
-        setError("Please ensure that there are no trailing commas");
-        return;
-      }
-      if (i == 0) continue;
-      if (probabilityArrayFloat[i] < probabilityArrayFloat[i - 1]) {
-        window.log(`Probabilities should decrease from left to right`);
-        setError("R Values should increase from left to right");
-        return false;
-      }
-    }
-    return true;
+  const resetAll = () => {
+    setState((prevState) => {
+      return {
+        ...prevState,
+        notification: null,
+        error: null,
+        loading: false,
+      };
+    });
   };
 
   const submitData = async () => {
     window.log(`Calculating partials for p: ${probabilities}, r: ${rValues}`);
+    resetAll();
 
     // Lambda request receiver endpoint
     const partialCalculatorURL =
@@ -135,13 +69,31 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       parseFloat(value)
     );
     window.log(`rFloats: ${rFloats} ; probs: ${probFloats}`);
-    if (probFloats.length != rFloats) {
+    if (probFloats.length != rFloats.length) {
+      window.log(
+        `Please ensure that you have the same number of R Values as Probabilities`
+      );
       setError(
         "Please ensure that you have the same number of R Values as Probabilities"
       );
       return;
     }
-    // Check that the lengths of the two array are the same
+
+    switch (probFloats.length) {
+      case 3:
+        window.log(`Hit 3`);
+        setNotification("NOTE: This may take up to 30 seconds to run...");
+        break;
+      case 4:
+        window.log(`Hit 4`);
+        setNotification(
+          "NOTE: 4 sets of inputs can take over a minute to run... Please be patient!"
+        );
+        break;
+      default:
+        window.log(`Hit none`);
+        resetAll();
+    }
     return;
 
     const objectId = uuidv4();
@@ -212,6 +164,95 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     });
   };
 
+  const checkRValues = (rVals) => {
+    const rValueArrayStrings = rVals.trim().split(",");
+    if (!rVals.includes(",")) {
+      window.log(`No comma in R vals`);
+      setError("Please provide a comma separated list eg 2, 3, 4");
+      return false;
+    }
+    if (rValueArrayStrings.length <= 1) {
+      window.log(`Please provide more than one value, separated by commas`);
+      setError("Please provide more than one value, separated by commas");
+      return false;
+    }
+    if (rValueArrayStrings.length > 4) {
+      window.log(
+        `rValue array too long, aborting: ${rValueArrayStrings.length}`
+      );
+      setError(
+        "R Values array is too long, please provide a maximum of 4 entries"
+      );
+      return false;
+    }
+    const rValueArrayFloat = rValueArrayStrings.map((value) =>
+      parseFloat(value)
+    );
+    window.log(`Float array: ${rValueArrayFloat}`);
+    for (let i = 0; i <= rValueArrayFloat.length; i++) {
+      if (rValueArrayFloat[i] === false || Number.isNaN(rValueArrayFloat[i])) {
+        window.log(`Please ensure that there are no trailing commas`);
+        setError("Please ensure that there are no trailing commas");
+        return;
+      }
+      if (i == 0) continue;
+      if (rValueArrayFloat[i] < rValueArrayFloat[i - 1]) {
+        window.log(`R Values should increase from left to right`);
+        setError("R Values should increase from left to right");
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const checkProbabilities = (probs) => {
+    const probabilityArrayStrings = probs.trim().split(",");
+    if (!probs.includes(",")) {
+      window.log(`No comma in probabilities`);
+      setError(
+        "Please provide a comma separated list for both inputs eg 2, 3, 4"
+      );
+      return false;
+    }
+    if (probabilityArrayStrings.length <= 1) {
+      window.log(
+        `${"Please provide more than one value, separated by commas"}`
+      );
+      setError("Please provide more than one value, separated by commas");
+      return false;
+    }
+    if (probabilityArrayStrings.length > 4) {
+      window.log(
+        `probabilites array too long, aborting: ${probabilityArrayStrings.length}`
+      );
+      setError(
+        "R Values array is too long, please provide a maximum of 4 entries"
+      );
+      return false;
+    }
+    const probabilityArrayFloat = probabilityArrayStrings.map((value) =>
+      parseFloat(value)
+    );
+    window.log(`Float array: ${probabilityArrayFloat}`);
+    for (let i = 0; i <= probabilityArrayFloat.length; i++) {
+      if (
+        probabilityArrayFloat[i] === false ||
+        Number.isNaN(probabilityArrayFloat[i])
+      ) {
+        window.log(`Please ensure that there are no trailing commas`);
+        setError("Please ensure that there are no trailing/trapped commas");
+        return;
+      }
+      if (i == 0) continue;
+      if (probabilityArrayFloat[i] > probabilityArrayFloat[i - 1]) {
+        window.log(`Probabilities should decrease from left to right`);
+        setError("Probabilities should decrease from left to right");
+        return false;
+      }
+    }
+    return true;
+  };
+
   const updateRValues = (newValue) => {
     window.log(`new R Value text: ${newValue}`);
     const re = /^[0-9 ,\b]+$/;
@@ -253,6 +294,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     windowIsOpen,
     loading,
     error,
+    notification,
     updateRValues,
     updateProbabilities,
     submitData,
