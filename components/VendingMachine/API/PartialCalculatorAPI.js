@@ -94,74 +94,81 @@ const PartialCalculatorAPI = ({ state, setState }) => {
         window.log(`Hit none`);
         resetAll();
     }
-    return;
-
-    const objectId = uuidv4();
-    const dataInputs = {
-      id: objectId,
-      R: [2, 4, 6, 8],
-      P_AtR: [80, 57, 60, 20],
-      total_shares: 1000,
-    };
-    const headers = {
-      "Content-Type": "application/json",
-    };
-    window.log(`Sending data to endpoint: ${JSON.stringify(dataInputs)}`);
-    // Send data to cloud
-    var queryID;
-    try {
-      setLoading(true);
-      const response = await axios.post(
-        partialCalculatorURL,
-        dataInputs,
-        headers
-      );
-      window.log(`Response: ${JSON.stringify(response)}`);
-      const body = JSON.parse(response["data"]["body"]);
-      window.log(`body: ${JSON.stringify(body)}`);
-      queryID = body["id"];
-      if (dataInputs.id != queryID) {
-        throw "database id is not the same as sent id";
-      }
-      window.log(`Done sending data to backend`);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      setError(error);
-      window.log(`Error hitting API: ${error}`);
-      return;
-    }
-    window.log(`Now looking to poll with id: ${queryID}`);
-    // Now poll the backend until we get a response.
-
-    const queryIdObject = { id: queryID };
-    const queryBackend = async () => {
-      try {
-        window.log(`querying backend: ${JSON.stringify(queryIdObject)}`);
-        return await axios.post(pollingURL, queryIdObject, headers);
-      } catch (error) {
-        throw new Error(`Error calling axios post: ${error}`);
-      }
-    };
-
-    try {
-      const partialCalculatorResult = await poll(
-        queryBackend,
-        validatePollingResponse,
-        20
-      );
-      window.log(
-        `PartialCalculatorResult: ${JSON.stringify(partialCalculatorResult)}`
-      );
-    } catch (error) {
-      window.log(`Error polling: ${error}`);
-    }
     setState((prevState) => {
+      window.log(`Changing`);
       return {
         ...prevState,
         windowIsOpen: !windowIsOpen,
       };
     });
+    // return;
+
+    // const objectId = uuidv4();
+    // const dataInputs = {
+    //   id: objectId,
+    //   R: [2, 4, 6, 8],
+    //   P_AtR: [80, 57, 60, 20],
+    //   total_shares: 1000,
+    // };
+    // const headers = {
+    //   "Content-Type": "application/json",
+    // };
+    // window.log(`Sending data to endpoint: ${JSON.stringify(dataInputs)}`);
+    // // Send data to cloud
+    // var queryID;
+    // try {
+    //   setLoading(true);
+    //   const response = await axios.post(
+    //     partialCalculatorURL,
+    //     dataInputs,
+    //     headers
+    //   );
+    //   window.log(`Response: ${JSON.stringify(response)}`);
+    //   const body = JSON.parse(response["data"]["body"]);
+    //   window.log(`body: ${JSON.stringify(body)}`);
+    //   queryID = body["id"];
+    //   if (dataInputs.id != queryID) {
+    //     throw "database id is not the same as sent id";
+    //   }
+    //   window.log(`Done sending data to backend`);
+    //   setLoading(false);
+    // } catch (error) {
+    //   setLoading(false);
+    //   setError(error);
+    //   window.log(`Error hitting API: ${error}`);
+    //   return;
+    // }
+    // window.log(`Now looking to poll with id: ${queryID}`);
+    // // Now poll the backend until we get a response.
+
+    // const queryIdObject = { id: queryID };
+    // const queryBackend = async () => {
+    //   try {
+    //     window.log(`querying backend: ${JSON.stringify(queryIdObject)}`);
+    //     return await axios.post(pollingURL, queryIdObject, headers);
+    //   } catch (error) {
+    //     throw new Error(`Error calling axios post: ${error}`);
+    //   }
+    // };
+
+    // try {
+    //   const partialCalculatorResult = await poll(
+    //     queryBackend,
+    //     validatePollingResponse,
+    //     20
+    //   );
+    //   window.log(
+    //     `PartialCalculatorResult: ${JSON.stringify(partialCalculatorResult)}`
+    //   );
+    // } catch (error) {
+    //   window.log(`Error polling: ${error}`);
+    // }
+    // setState((prevState) => {
+    //   return {
+    //     ...prevState,
+    //     windowIsOpen: !windowIsOpen,
+    //   };
+    // });
   };
 
   const checkRValues = (rVals) => {
