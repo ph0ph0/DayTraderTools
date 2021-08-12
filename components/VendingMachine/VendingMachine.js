@@ -1,20 +1,22 @@
 import {
   Box,
   Center,
-  useColorModeValue,
   Heading,
   Text,
   Stack,
-  Image,
+  Flex,
+  Link,
   Input,
   Tooltip,
 } from "@chakra-ui/react";
+import { chakra } from "@chakra-ui/system";
 import VendingMachineWindowWrapper from "./vendingMachineWindow/VendingMachineWindow";
 import LeverButton from "./LeverButton";
 import styled from "styled-components";
 import StyledInputWrapper from "../primitive/Inputs";
 import ErrorText from "../primitive/ErrorText";
 import NotificationText from "../primitive/NotificationText";
+import { useColorModeValue } from "@chakra-ui/color-mode";
 
 import PartialCalculatorAPI from "./API/PartialCalculatorAPI";
 import useAPI from "../../CustomHooks/useAPI";
