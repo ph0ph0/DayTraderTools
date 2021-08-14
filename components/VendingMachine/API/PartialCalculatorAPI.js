@@ -47,6 +47,32 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     });
   };
 
+  const updateRValues = (newValue) => {
+    window.log(`new R Value text: ${newValue}`);
+    const re = /^[0-9 ,\b]+$/;
+    if (newValue === "" || re.test(newValue)) {
+      setState((prevState) => {
+        return {
+          ...prevState,
+          rValues: newValue,
+        };
+      });
+    }
+  };
+
+  const updateProbabilities = (newValue) => {
+    window.log(`new probabilities text: ${newValue}`);
+    const re = /^[0-9 ,\b]+$/;
+    if (newValue === "" || re.test(newValue)) {
+      setState((prevState) => {
+        return {
+          ...prevState,
+          probabilities: newValue,
+        };
+      });
+    }
+  };
+
   const submitData = async () => {
     window.log(`Calculating partials for p: ${probabilities}, r: ${rValues}`);
     resetAll();
@@ -260,32 +286,6 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     return true;
   };
 
-  const updateRValues = (newValue) => {
-    window.log(`new R Value text: ${newValue}`);
-    const re = /^[0-9 ,\b]+$/;
-    if (newValue === "" || re.test(newValue)) {
-      setState((prevState) => {
-        return {
-          ...prevState,
-          rValues: newValue,
-        };
-      });
-    }
-  };
-
-  const updateProbabilities = (newValue) => {
-    window.log(`new probabilities text: ${newValue}`);
-    const re = /^[0-9 ,\b]+$/;
-    if (newValue === "" || re.test(newValue)) {
-      setState((prevState) => {
-        return {
-          ...prevState,
-          probabilities: newValue,
-        };
-      });
-    }
-  };
-
   const switchWindow = () => {
     setState((prevState) => {
       return {
@@ -302,6 +302,10 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     loading,
     error,
     notification,
+    setError,
+    setLoading,
+    setNotification,
+    resetAll,
     updateRValues,
     updateProbabilities,
     submitData,
