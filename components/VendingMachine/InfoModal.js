@@ -66,8 +66,8 @@ const InfoModal = (...props) => {
             cloud where a proprietary algorithm runs hundreds of thousands,
             sometimes millions of calculations (depending on the number of
             inputs), in order to optimise your exit strategy. The algorithm then
-            sends back the top 20 partialling strategies with the greatest
-            profit value.
+            sends back the top 3 partialling strategies with the greatest profit
+            value.
           </ModalBody>
           <ModalHeader>How do I use it?</ModalHeader>
           <ModalBody>

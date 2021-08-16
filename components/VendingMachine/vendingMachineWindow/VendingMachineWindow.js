@@ -13,7 +13,7 @@ const VendingMachineWindow = ({ api, ...props }) => {
         }}
       />
       <ResultBucket resize={"none"} disabled>
-        cuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcuntcunt
+        {api.resultText}
       </ResultBucket>
     </WindowHolder>
   );
@@ -73,6 +73,7 @@ const ResultBucket = styled.div`
   font-family: Arial, Helvetica, sans-serif;
   font-size: small;
   color: black;
+  white-space: pre-wrap;
 `;
 
 const VendingMachineWindowWrapper = styled(VendingMachineWindow)``;

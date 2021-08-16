@@ -30,12 +30,13 @@ const label =
 
 export default function VendingMachine() {
   const api = useAPI(PartialCalculatorAPI, {
-    rValues: "",
-    probabilities: "",
+    rValues: "1,2",
+    probabilities: "4,3",
     windowIsOpen: false,
     loading: false,
     error: null,
     notification: null,
+    resultText: "",
   });
 
   const InfoToolTip = "";

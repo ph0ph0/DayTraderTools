@@ -9,6 +9,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
   const loading = state.loading;
   const error = state.error;
   const notification = state.notification;
+  const resultText = state.resultText;
 
   const setLoading = (value) => {
     setState((prevState) => {
@@ -43,6 +44,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
         notification: null,
         error: null,
         loading: false,
+        resultText: "",
       };
     });
   };
@@ -75,6 +77,19 @@ const PartialCalculatorAPI = ({ state, setState }) => {
 
   const submitData = async () => {
     window.log(`Calculating partials for p: ${probabilities}, r: ${rValues}`);
+    if (windowIsOpen) {
+      window.log(`Closing window in submit`);
+      setState((prevState) => {
+        return {
+          ...prevState,
+          windowIsOpen: false,
+        };
+      });
+    }
+    // let the window close
+    if (windowIsOpen) {
+      await new Promise((resolve) => setTimeout(resolve, 3000));
+    }
     resetAll();
 
     // Lambda request receiver endpoint
@@ -120,88 +135,115 @@ const PartialCalculatorAPI = ({ state, setState }) => {
         window.log(`Hit none`);
         resetAll();
     }
-    setState((prevState) => {
-      window.log(`Changing`);
-      return {
-        ...prevState,
-        windowIsOpen: !windowIsOpen,
-      };
-    });
-    // return;
 
-    // const objectId = uuidv4();
-    // const dataInputs = {
-    //   id: objectId,
-    //   R: [2, 4, 6, 8],
-    //   P_AtR: [80, 57, 60, 20],
-    //   total_shares: 1000,
-    // };
-    // const headers = {
-    //   "Content-Type": "application/json",
-    // };
-    // window.log(`Sending data to endpoint: ${JSON.stringify(dataInputs)}`);
-    // // Send data to cloud
-    // var queryID;
-    // try {
-    //   setLoading(true);
-    //   const response = await axios.post(
-    //     partialCalculatorURL,
-    //     dataInputs,
-    //     headers
-    //   );
-    //   window.log(`Response: ${JSON.stringify(response)}`);
-    //   const body = JSON.parse(response["data"]["body"]);
-    //   window.log(`body: ${JSON.stringify(body)}`);
-    //   queryID = body["id"];
-    //   if (dataInputs.id != queryID) {
-    //     throw "database id is not the same as sent id";
-    //   }
-    //   window.log(`Done sending data to backend`);
-    //   setLoading(false);
-    // } catch (error) {
-    //   setLoading(false);
-    //   setError(error);
-    //   window.log(`Error hitting API: ${error}`);
-    //   return;
-    // }
-    // window.log(`Now looking to poll with id: ${queryID}`);
-    // // Now poll the backend until we get a response.
+    const objectId = uuidv4();
+    const dataInputs = {
+      id: objectId,
+      R: rFloats,
+      P_AtR: probFloats,
+      total_shares: 1000,
+    };
+    const headers = {
+      "Content-Type": "application/json",
+    };
+    window.log(`Sending data to endpoint: ${JSON.stringify(dataInputs)}`);
+    // Send data to cloud
+    var queryID;
+    try {
+      setLoading(true);
+      const response = await axios.post(
+        partialCalculatorURL,
+        dataInputs,
+        headers
+      );
+      window.log(`Response: ${JSON.stringify(response)}`);
+      const body = JSON.parse(response["data"]["body"]);
+      window.log(`body: ${JSON.stringify(body)}`);
+      queryID = body["id"];
+      if (dataInputs.id != queryID) {
+        throw "database id is not the same as sent id";
+      }
+      window.log(`Done sending data to backend`);
+      setLoading(false);
+    } catch (error) {
+      setLoading(false);
+      setError(error);
+      window.log(`Error hitting API: ${error}`);
+      return;
+    }
+    window.log(`Now looking to poll with id: ${queryID}`);
+    // Now poll the backend until we get a response.
 
-    // const queryIdObject = { id: queryID };
-    // const queryBackend = async () => {
-    //   try {
-    //     window.log(`querying backend: ${JSON.stringify(queryIdObject)}`);
-    //     return await axios.post(pollingURL, queryIdObject, headers);
-    //   } catch (error) {
-    //     throw new Error(`Error calling axios post: ${error}`);
-    //   }
-    // };
+    const queryIdObject = { id: queryID };
+    const queryBackend = async () => {
+      try {
+        window.log(`querying backend: ${JSON.stringify(queryIdObject)}`);
+        return await axios.post(pollingURL, queryIdObject, headers);
+      } catch (error) {
+        throw new Error(`Error calling axios post: ${error}`);
+      }
+    };
 
-    // try {
-    //   const partialCalculatorResult = await poll(
-    //     queryBackend,
-    //     validatePollingResponse,
-    //     20
-    //   );
-    //   window.log(
-    //     `PartialCalculatorResult: ${JSON.stringify(partialCalculatorResult)}`
-    //   );
-    // } catch (error) {
-    //   window.log(`Error polling: ${error}`);
-    // }
-    // setState((prevState) => {
-    //   return {
-    //     ...prevState,
-    //     windowIsOpen: !windowIsOpen,
-    //   };
-    // });
+    try {
+      const partialCalculatorResult = await poll(
+        queryBackend,
+        validatePollingResponse,
+        20
+      );
+      window.log(
+        `PartialCalculatorResult: ${JSON.stringify(partialCalculatorResult)}`
+      );
+      window.log(`rFLOATSBJKKJHKLBJ: ${rFloats.length}`);
+      setState((prevState) => {
+        return {
+          ...prevState,
+          windowIsOpen: true,
+          resultText: parseResults(partialCalculatorResult, rFloats),
+        };
+      });
+    } catch (error) {
+      window.log(`Error polling: ${error}`);
+      setError(`Contact admin: ${error}`);
+    }
+  };
+
+  const parseResults = (jsonData, rVals) => {
+    // We only want the top 3
+    const limit = 3;
+    // data array is an array of arrays. Each element in the dataArray is an array which contains the result for that iteration. So the first entry would be:
+    // [[0,100], 900].
+    window.log(`rValLength!: ${rVals.length}`);
+    const dataArray = jsonData.data.body[0].results;
+    let resultString = "Totals are after 1000 trades \n\n";
+    for (var i = 0; i < limit; i++) {
+      resultString = resultString.concat(`Strategy ${i + 1}: \n`);
+      const result = dataArray[i];
+      for (var j = 0; j < rVals.length; j++) {
+        // Iterate through the partial percentages
+        const partialPercentage = result[0][j];
+        window.log(`pP: ${partialPercentage}`);
+        const rValue = rVals[j];
+        window.log(`for rVAL: ${rValue}`);
+        const string = `${partialPercentage}% partial at ${rValue}R,`;
+        window.log(`Made string: ${string}`);
+        resultString = resultString.concat(string, "\n");
+      }
+      resultString = resultString.concat(` Total: ${result[1]}R`, "\n\n");
+    }
+
+    // let stringData = JSON.stringify(jsonData.data.body[0].results);
+    // stringData = stringData.replace(/\[/g, "(");
+    // stringData = stringData.replace(/\]/g, ")");
+    return resultString;
   };
 
   const checkRValues = (rVals) => {
     const rValueArrayStrings = rVals.trim().split(",");
     if (!rVals.includes(",")) {
       window.log(`No comma in R vals`);
-      setError("Please provide a comma separated list eg 2, 3, 4");
+      setError(
+        "Please provide a comma separated list for both inputs eg 2, 3, 4"
+      );
       return false;
     }
     if (rValueArrayStrings.length <= 1) {
@@ -225,7 +267,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     for (let i = 0; i <= rValueArrayFloat.length; i++) {
       if (rValueArrayFloat[i] === false || Number.isNaN(rValueArrayFloat[i])) {
         window.log(`Please ensure that there are no trailing commas`);
-        setError("Please ensure that there are no trailing commas");
+        setError("Please ensure that there are no trailing/trapped commas");
         return;
       }
       if (i == 0) continue;
@@ -259,7 +301,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
         `probabilites array too long, aborting: ${probabilityArrayStrings.length}`
       );
       setError(
-        "R Values array is too long, please provide a maximum of 4 entries"
+        "Probabilities array is too long, please provide a maximum of 4 entries"
       );
       return false;
     }
@@ -302,12 +344,15 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     loading,
     error,
     notification,
+    resultText,
     setError,
     setLoading,
     setNotification,
     resetAll,
     updateRValues,
     updateProbabilities,
+    checkRValues,
+    checkProbabilities,
     submitData,
   };
 };
