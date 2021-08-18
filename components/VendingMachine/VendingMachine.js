@@ -31,8 +31,8 @@ const label =
 
 export default function VendingMachine() {
   const api = useAPI(PartialCalculatorAPI, {
-    rValues: "1,2",
-    probabilities: "4,3",
+    rValues: "1, 2",
+    probabilities: "4, 3",
     windowIsOpen: false,
     loading: false,
     error: null,

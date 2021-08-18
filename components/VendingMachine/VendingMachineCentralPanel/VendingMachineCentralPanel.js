@@ -21,27 +21,8 @@ import { motion } from "framer-motion";
 
 const VendingMachineCentralPanel = ({ api, ...props }) => {
   return (
-    <AnimationDiv
-      animate={{ backgroundColor: ["hsl(0,100, 92)", "hsl(361, 100, 92)"] }}
-      transition={{ repeat: Infinity, duration: 0.8 }}
-    >
-      <SpinnerDiv
-        animate={{
-          //   scale: [1, 1.3, 1.3, 1, 1],
-          rotate: [0, 360],
-          borderRadius: ["20%", "20%", "50%", "50%", "20%"],
-          backgroundColor: ["hsl(0,100, 92)", "hsl(361, 100, 92)"],
-        }}
-        transition={{ repeat: Infinity, duration: 3 }}
-      />
-      <SpinnerDiv
-        animate={{
-          //   scale: [1, 1.3, 1.3, 1, 1],
-          rotate: [360, 0],
-          borderRadius: ["20%", "20%", "50%", "50%", "20%"],
-        }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      />
+    <>
+      <BackgroundAnimation api={api} />
       <Box
         // The central panel of the vending machine. This contains the inputs and button
         role={"group"}
@@ -86,16 +67,18 @@ const VendingMachineCentralPanel = ({ api, ...props }) => {
           <NotificationText>{api.notification}</NotificationText>
         )}
         {api.error && <ErrorText>{api.error}</ErrorText>}
-        <Loader />
+        <Loader api={api} />
         <VendingMachineWindowWrapper api={api} />
       </Box>
-    </AnimationDiv>
+    </>
   );
 };
 
 const VendingMachineCentralPanelWrapper = styled(VendingMachineCentralPanel)``;
 
 const AnimationDiv = styled(motion.div)`
+  position: absolute;
+  z-index: -10;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -113,6 +96,38 @@ const SpinnerDiv = styled(motion.div)`
   background-color: #d5d6f0;
 `;
 
+const BackgroundAnimation = ({ api, children, ...props }) => {
+  return (
+    <>
+      {api.loading && (
+        <AnimationDiv
+          animate={{ backgroundColor: ["hsl(0,100, 92)", "hsl(361, 100, 92)"] }}
+          transition={{ repeat: Infinity, duration: 0.8 }}
+        />
+      )}
+      {api.loading && (
+        <SpinnerDiv
+          animate={{
+            rotate: [0, 360],
+            borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+            backgroundColor: ["hsl(0,100, 92)", "hsl(361, 100, 92)"],
+          }}
+          transition={{ repeat: Infinity, duration: 3 }}
+        />
+      )}
+      {api.loading && (
+        <SpinnerDiv
+          animate={{
+            rotate: [360, 0],
+            borderRadius: ["20%", "20%", "50%", "50%", "20%"],
+          }}
+          transition={{ repeat: Infinity, duration: 2 }}
+        />
+      )}
+    </>
+  );
+};
+
 const StyledLoader = styled(motion.div)`
   position: absolute;
   top: 47px;
@@ -127,102 +142,106 @@ const StyledLoader = styled(motion.div)`
   flex-direction: column;
 `;
 
-const Loader = () => {
+const Loader = ({ api }) => {
   return (
-    <StyledLoader>
-      <motion.div
-        animate={{
-          rotate: 360,
-          borderRadius: ["100% 1%", "1% 100%"],
-          x: 100,
-          y: [20, 0, 20],
-        }}
-        initial={{
-          x: -100,
-          y: [20, 0, 20],
-        }}
-        transition={{
-          flip: Infinity,
-          duration: 1.9,
-          ease: "easeInOut",
-        }}
-        style={{
-          height: "20px",
-          background: "#4287f5",
-          width: "20px",
-          //   borderRadius: "2% 50%",
-        }}
-      ></motion.div>
-      <motion.div
-        animate={{
-          rotate: 360,
-          borderRadius: ["100% 1%", "1% 100%"],
-          x: -90,
-          y: [20, 0, 20],
-        }}
-        initial={{
-          x: 90,
-          y: [20, 0, 20],
-        }}
-        transition={{
-          flip: Infinity,
-          duration: 2.1,
-          ease: "easeInOut",
-        }}
-        style={{
-          height: "20px",
-          background: "#f5c242",
-          width: "20px",
-          //   borderRadius: "2% 50%",
-        }}
-      ></motion.div>
-      <motion.div
-        animate={{
-          rotate: 360,
-          borderRadius: ["100% 1%", "1% 100%"],
-          x: -40,
-          y: [20, 0, 20],
-        }}
-        initial={{
-          x: 40,
-          y: [20, 0, 20],
-        }}
-        transition={{
-          flip: Infinity,
-          duration: 2.3,
-          ease: "easeInOut",
-        }}
-        style={{
-          height: "20px",
-          background: "#f59342",
-          width: "20px",
-          //   borderRadius: "2% 50%",
-        }}
-      ></motion.div>
-      <motion.div
-        animate={{
-          rotate: 360,
-          borderRadius: ["100% 1%", "1% 100%"],
-          x: -70,
-          y: [20, 0, 20],
-        }}
-        initial={{
-          x: 70,
-          y: [20, 0, 20],
-        }}
-        transition={{
-          flip: Infinity,
-          duration: 1.7,
-          ease: "easeInOut",
-        }}
-        style={{
-          height: "20px",
-          background: "#88d17b",
-          width: "20px",
-          //   borderRadius: "2% 50%",
-        }}
-      ></motion.div>
-    </StyledLoader>
+    <>
+      {api.loading && (
+        <StyledLoader>
+          <motion.div
+            animate={{
+              rotate: 360,
+              borderRadius: ["100% 1%", "1% 100%"],
+              x: 100,
+              y: [20, 0, 20],
+            }}
+            initial={{
+              x: -100,
+              y: [20, 0, 20],
+            }}
+            transition={{
+              flip: Infinity,
+              duration: 1.9,
+              ease: "easeInOut",
+            }}
+            style={{
+              height: "20px",
+              background: "#4287f5",
+              width: "20px",
+              //   borderRadius: "2% 50%",
+            }}
+          ></motion.div>
+          <motion.div
+            animate={{
+              rotate: 360,
+              borderRadius: ["100% 1%", "1% 100%"],
+              x: -90,
+              y: [20, 0, 20],
+            }}
+            initial={{
+              x: 90,
+              y: [20, 0, 20],
+            }}
+            transition={{
+              flip: Infinity,
+              duration: 2.1,
+              ease: "easeInOut",
+            }}
+            style={{
+              height: "20px",
+              background: "#f5c242",
+              width: "20px",
+              //   borderRadius: "2% 50%",
+            }}
+          ></motion.div>
+          <motion.div
+            animate={{
+              rotate: 360,
+              borderRadius: ["100% 1%", "1% 100%"],
+              x: -40,
+              y: [20, 0, 20],
+            }}
+            initial={{
+              x: 40,
+              y: [20, 0, 20],
+            }}
+            transition={{
+              flip: Infinity,
+              duration: 2.3,
+              ease: "easeInOut",
+            }}
+            style={{
+              height: "20px",
+              background: "#f59342",
+              width: "20px",
+              //   borderRadius: "2% 50%",
+            }}
+          ></motion.div>
+          <motion.div
+            animate={{
+              rotate: 360,
+              borderRadius: ["100% 1%", "1% 100%"],
+              x: -70,
+              y: [20, 0, 20],
+            }}
+            initial={{
+              x: 70,
+              y: [20, 0, 20],
+            }}
+            transition={{
+              flip: Infinity,
+              duration: 1.7,
+              ease: "easeInOut",
+            }}
+            style={{
+              height: "20px",
+              background: "#88d17b",
+              width: "20px",
+              //   borderRadius: "2% 50%",
+            }}
+          ></motion.div>
+        </StyledLoader>
+      )}
+    </>
   );
 };
 

@@ -164,27 +164,19 @@ const PartialCalculatorAPI = ({ state, setState }) => {
         throw "database id is not the same as sent id";
       }
       window.log(`Done sending data to backend`);
-      setLoading(false);
-    } catch (error) {
-      setLoading(false);
-      setError(error);
-      window.log(`Error hitting API: ${error}`);
-      return;
-    }
-    window.log(`Now looking to poll with id: ${queryID}`);
-    // Now poll the backend until we get a response.
+      window.log(`Now looking to poll with id: ${queryID}`);
 
-    const queryIdObject = { id: queryID };
-    const queryBackend = async () => {
-      try {
-        window.log(`querying backend: ${JSON.stringify(queryIdObject)}`);
-        return await axios.post(pollingURL, queryIdObject, headers);
-      } catch (error) {
-        throw new Error(`Error calling axios post: ${error}`);
-      }
-    };
+      // Now poll the backend until we get a response.
+      const queryIdObject = { id: queryID };
+      const queryBackend = async () => {
+        try {
+          window.log(`querying backend: ${JSON.stringify(queryIdObject)}`);
+          return await axios.post(pollingURL, queryIdObject, headers);
+        } catch (error) {
+          throw new Error(`Error calling axios post: ${error}`);
+        }
+      };
 
-    try {
       const partialCalculatorResult = await poll(
         queryBackend,
         validatePollingResponse,
@@ -194,6 +186,8 @@ const PartialCalculatorAPI = ({ state, setState }) => {
         `PartialCalculatorResult: ${JSON.stringify(partialCalculatorResult)}`
       );
       window.log(`rFLOATSBJKKJHKLBJ: ${rFloats.length}`);
+      setLoading(false);
+      setNotification(null);
       setState((prevState) => {
         return {
           ...prevState,
@@ -202,8 +196,11 @@ const PartialCalculatorAPI = ({ state, setState }) => {
         };
       });
     } catch (error) {
-      window.log(`Error polling: ${error}`);
+      setLoading(false);
       setError(`Contact admin: ${error}`);
+      setNotification(null);
+      window.log(`Error hitting API: ${error}`);
+      return;
     }
   };
 
