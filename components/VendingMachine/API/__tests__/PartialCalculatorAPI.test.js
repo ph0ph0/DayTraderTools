@@ -163,4 +163,5 @@ describe("input checkers", () => {
     );
     resetTests();
   });
+  it("checks that each probability is less than 100%");
 });

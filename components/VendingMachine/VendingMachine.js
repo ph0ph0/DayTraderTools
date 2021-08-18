@@ -21,6 +21,7 @@ import { useColorModeValue } from "@chakra-ui/color-mode";
 import PartialCalculatorAPI from "./API/PartialCalculatorAPI";
 import useAPI from "../../CustomHooks/useAPI";
 import InfoModal from "./InfoModal";
+import VendingMachineCentralPanelWrapper from "./VendingMachineCentralPanel/VendingMachineCentralPanel";
 
 const IMAGE =
   "https://previews.123rf.com/images/pamela4578/pamela45781810/pamela4578181000097/112030550-the-beautiful-red-spice-of-the-saffron-flower.jpg";
@@ -109,52 +110,7 @@ export default function VendingMachine() {
         color={"whiteAlpha.700"}
         fontFamily={"Monoton"}
       >
-        <Box
-          // The central panel of the vending machine. This contains the inputs and button
-          role={"group"}
-          p={6}
-          w={"80%"}
-          height={"95%"}
-          bg={useColorModeValue("white", "gray.800")}
-          // boxShadow={"lg"}
-          // rounded={"lg"}
-          pos={"relative"}
-          zIndex={1}
-          border={"2px"}
-          borderColor={"gray.100"}
-          borderTopRightRadius={"50"}
-          borderTopLeftRadius={"50"}
-          borderBottomLeftRadius={"50"}
-          borderBottomRightRadius={"50"}
-          // bg={"red.400"}
-          fontSize={"40"}
-          textAlign={"center"}
-          color={"whiteAlpha.700"}
-          fontFamily={"Monoton"}
-          display={"flex"}
-          flexDirection={"column"}
-          justifyContent={"flex-start"}
-          alignItems={"center"}
-        >
-          {/* The Help Icon */}
-          <InfoModal></InfoModal>
-          <StyledInputWrapper
-            placeholder={"R Values"}
-            value={api.rValues}
-            onChange={(event) => api.updateRValues(event.target.value)}
-          />
-          <StyledInputWrapper
-            placeholder={"Probability"}
-            value={api.probabilities}
-            onChange={(event) => api.updateProbabilities(event.target.value)}
-          />
-          <LeverButton api={api} />
-          {api.notification && (
-            <NotificationText>{api.notification}</NotificationText>
-          )}
-          {api.error && <ErrorText>{api.error}</ErrorText>}
-          <VendingMachineWindowWrapper api={api} />
-        </Box>
+        <VendingMachineCentralPanelWrapper api={api} />
       </Center>
     </Center>
   );
