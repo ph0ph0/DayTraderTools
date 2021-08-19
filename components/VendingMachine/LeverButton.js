@@ -48,6 +48,7 @@ const LeverTrack = styled.div`
 const LeverButton = styled(motion.img)`
   margin-top: 20px;
   z-index: 10;
+  /* width: 70px; */
   /* visibility: hidden; */
 `;
 

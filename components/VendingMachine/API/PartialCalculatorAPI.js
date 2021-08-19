@@ -124,12 +124,18 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       case 3:
         window.log(`Hit 3`);
         setNotification("NOTE: This may take up to 30 seconds to run...");
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
         break;
       case 4:
         window.log(`Hit 4`);
         setNotification(
           "NOTE: 4 sets of inputs can take over a minute to run... Please be patient!"
         );
+        setTimeout(() => {
+          setNotification(null);
+        }, 5000);
         break;
       default:
         window.log(`Hit none`);

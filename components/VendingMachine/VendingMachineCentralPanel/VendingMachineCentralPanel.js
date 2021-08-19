@@ -18,6 +18,7 @@ import ErrorText from "../../primitive/ErrorText";
 import NotificationText from "../../primitive/NotificationText";
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { motion } from "framer-motion";
+import TopRowWrapper from "../InnerPanelTopRow/InnerPanelTopTowWrapper";
 
 const VendingMachineCentralPanel = ({ api, ...props }) => {
   return (
@@ -50,8 +51,7 @@ const VendingMachineCentralPanel = ({ api, ...props }) => {
         justifyContent={"flex-start"}
         alignItems={"center"}
       >
-        {/* The Help Icon */}
-        <InfoModal></InfoModal>
+        <TopRowWrapper />
         <StyledInputWrapper
           placeholder={"R Values"}
           value={api.rValues}

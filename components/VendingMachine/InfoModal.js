@@ -46,8 +46,9 @@ const InfoModal = (...props) => {
           <ModalCloseButton />
           <ModalBody>
             The Partials Calculator Vending Machine is an algorithm that will
-            optimise your exit strategy for you. If you partial trades according
-            to the R value that the price has reached, then this is for you.
+            optimise your exit strategy for you and maximise your profits. If
+            you partial trades according to the R value that the price has
+            reached, then this is for you.
           </ModalBody>
           <ModalHeader>Why would I want to use this?</ModalHeader>
           <ModalBody>

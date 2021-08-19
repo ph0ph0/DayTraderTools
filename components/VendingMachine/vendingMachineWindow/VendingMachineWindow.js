@@ -23,7 +23,7 @@ const WindowHolder = styled(Box)`
   margin: 0px;
   padding: 0px;
   margin-top: 100px;
-  height: 200px;
+
   width: 250px;
   /* background-color: blue; */
   display: flex;
@@ -39,7 +39,7 @@ const Window = styled(motion.div)`
   /* position: absolute; */
   margin-top: 0px;
   width: 250px;
-  height: 200px;
+  height: 00px;
   border-radius: 5px;
   border-color: #acc6f2;
   /* border-color: red; */
@@ -67,7 +67,7 @@ const ResultBucket = styled.div`
   outline: none;
   overflow: auto;
   &:hover {
-    border-color: #363e4d;
+    /* border-color: #363e4d; */
   }
   padding-top: 20px;
   font-family: Arial, Helvetica, sans-serif;
