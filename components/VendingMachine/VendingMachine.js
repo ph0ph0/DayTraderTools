@@ -20,7 +20,7 @@ import { useColorModeValue } from "@chakra-ui/color-mode";
 
 import PartialCalculatorAPI from "./API/PartialCalculatorAPI";
 import useAPI from "../../CustomHooks/useAPI";
-import InfoModal from "./InfoModal";
+import InfoModal from "./InnerPanelTopRow/InfoModal";
 import VendingMachineCentralPanelWrapper from "./VendingMachineCentralPanel/VendingMachineCentralPanel";
 
 const IMAGE =
@@ -31,8 +31,8 @@ const label =
 
 export default function VendingMachine() {
   const api = useAPI(PartialCalculatorAPI, {
-    rValues: "1, 2, 3, 4",
-    probabilities: "4, 3, 2, 1",
+    rValues: "",
+    probabilities: "",
     windowIsOpen: false,
     loading: false,
     error: null,

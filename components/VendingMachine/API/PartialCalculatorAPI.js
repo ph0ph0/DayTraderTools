@@ -331,14 +331,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     return true;
   };
 
-  const switchWindow = () => {
-    setState((prevState) => {
-      return {
-        ...prevState,
-        windowIsOpen: !windowIsOpen,
-      };
-    });
-  };
+  const buyTokens = () => {};
 
   return {
     rValues,
@@ -357,6 +350,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     checkRValues,
     checkProbabilities,
     submitData,
+    buyTokens,
   };
 };
 

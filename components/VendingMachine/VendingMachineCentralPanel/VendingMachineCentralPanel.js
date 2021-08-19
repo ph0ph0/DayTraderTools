@@ -10,7 +10,6 @@ import {
   Input,
   Tooltip,
 } from "@chakra-ui/react";
-import InfoModal from "../InfoModal";
 import StyledInputWrapper from "../../primitive/Inputs";
 import LeverButton from "../LeverButton";
 import VendingMachineWindowWrapper from "../vendingMachineWindow/VendingMachineWindow";
@@ -51,7 +50,7 @@ const VendingMachineCentralPanel = ({ api, ...props }) => {
         justifyContent={"flex-start"}
         alignItems={"center"}
       >
-        <TopRowWrapper />
+        <TopRowWrapper api={api} />
         <StyledInputWrapper
           placeholder={"R Values"}
           value={api.rValues}
