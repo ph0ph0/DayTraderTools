@@ -84,7 +84,6 @@ const AnimationDiv = styled(motion.div)`
   align-items: center;
   width: 100%;
   height: 100%;
-  border-radius: 50%;
   /* background-color: red; */
 `;
 
