@@ -10,10 +10,44 @@ import {
   ModalCloseButton,
   Button,
   useColorModeValue,
+  Box,
 } from "@chakra-ui/react";
+import { CardElement } from "@stripe/react-stripe-js";
+import { useStripe } from "@stripe/react-stripe-js";
+import { useElements } from "@stripe/react-stripe-js";
 
 const BuyTokensButton = ({ api, ...props }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const stripe = useStripe();
+  const elements = useElements();
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    if (!stripe || !elements) {
+      // Stripe.js has not loaded yet. Make sure to disable
+      // form submission until Stripe.js has loaded.
+      return;
+    }
+
+    // Get a reference to a mounted CardElement. Elements knows how
+    // to find your CardElement because there can only ever be one of
+    // each type of element.
+    const cardElement = elements.getElement(CardElement);
+
+    // Use your card Element with other Stripe.js APIs
+    const { error, paymentMethod } = await stripe.createPaymentMethod({
+      type: "card",
+      card: cardElement,
+    });
+
+    if (error) {
+      console.log("[error]", error);
+    } else {
+      console.log("[PaymentMethod]", paymentMethod);
+    }
+  };
+
   return (
     <>
       <ActionButton onClick={onOpen}>
@@ -23,15 +57,43 @@ const BuyTokensButton = ({ api, ...props }) => {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>
-          <ModalHeader>Modal Title</ModalHeader>
+          <ModalHeader>Purchase Profit Tokens</ModalHeader>
           <ModalCloseButton />
-          <ModalBody>Cunt</ModalBody>
-
+          <ModalBody>Price: $4.99 for one token</ModalBody>
+          <ModalBody>1 token = 1 spin</ModalBody>
+          <ModalBody fontSize={"0.8em"}>
+            Unfortunately, we have to charge to run the calculator since the
+            calculations are resource intensive!
+          </ModalBody>
+          <Box w={"90%"} padding={"10px"} m={"5%"}>
+            <CardElement
+              options={{
+                style: {
+                  base: {
+                    fontSize: "16px",
+                    color: "#424770",
+                    "::placeholder": {
+                      color: "#aab7c4",
+                    },
+                  },
+                  invalid: {
+                    color: "#9e2146",
+                  },
+                },
+              }}
+            />
+          </Box>
+          <ModalBody fontSize={"0.6em"}>
+            Please note that we use Stripe to securely collect payments.
+          </ModalBody>
           <ModalFooter>
-            <Button colorScheme="blue" mr={3} onClick={onClose}>
-              Close
+            <Button
+              colorScheme="green"
+              mr={3}
+              onClick={(event) => handleSubmit(event)}
+            >
+              Submit
             </Button>
-            <Button variant="ghost">Secondary Action</Button>
           </ModalFooter>
         </ModalContent>
       </Modal>

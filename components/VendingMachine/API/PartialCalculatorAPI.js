@@ -1,6 +1,7 @@
 import axios from "axios";
 import { poll, validatePollingResponse } from "../helpers/PollingFunctions";
 import { v4 as uuidv4 } from "uuid";
+import StripeHandler from "./Stripe/StripeHandler";
 
 const PartialCalculatorAPI = ({ state, setState }) => {
   const rValues = state.rValues;
@@ -330,8 +331,6 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     }
     return true;
   };
-
-  const buyTokens = () => {};
 
   return {
     rValues,
