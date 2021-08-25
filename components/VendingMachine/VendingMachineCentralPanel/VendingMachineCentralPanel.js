@@ -17,7 +17,7 @@ import ErrorText from "../../primitive/ErrorText";
 import NotificationText from "../../primitive/NotificationText";
 import { useColorModeValue } from "@chakra-ui/color-mode";
 import { motion } from "framer-motion";
-import TopRowWrapper from "../InnerPanelTopRow/InnerPanelTopTowWrapper";
+import TopRowWrapper from "../InnerPanelTopRow/InnerPanelTopRowWrapper";
 
 const VendingMachineCentralPanel = ({ api, ...props }) => {
   return (

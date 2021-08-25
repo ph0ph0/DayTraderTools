@@ -1,7 +1,6 @@
 import axios from "axios";
 import { poll, validatePollingResponse } from "../helpers/PollingFunctions";
 import { v4 as uuidv4 } from "uuid";
-import StripeHandler from "./Stripe/StripeHandler";
 
 const PartialCalculatorAPI = ({ state, setState }) => {
   const rValues = state.rValues;
@@ -11,12 +10,30 @@ const PartialCalculatorAPI = ({ state, setState }) => {
   const error = state.error;
   const notification = state.notification;
   const resultText = state.resultText;
+  const buyTokensIsLoading = state.buyTokensIsLoading;
+  const tokenError = state.tokenError;
+
+  // (semi) private var
+  var hasToken = false;
+  const setHasToken = (value) => {
+    hasToken = value;
+  };
 
   const setLoading = (value) => {
     setState((prevState) => {
       return {
         ...prevState,
         loading: value,
+      };
+    });
+  };
+
+  const setBuyTokensIsLoading = (value) => {
+    window.log(`buy tokens is loading`);
+    setState((prevState) => {
+      return {
+        ...prevState,
+        buyTokensIsLoading: value,
       };
     });
   };
@@ -29,6 +46,16 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       };
     });
   };
+
+  const setTokenError = (value) => {
+    setState((prevState) => {
+      return {
+        ...prevState,
+        tokenError: value,
+      };
+    });
+  };
+
   const setNotification = (value) => {
     setState((prevState) => {
       return {
@@ -158,6 +185,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     var queryID;
     try {
       setLoading(true);
+      setHasToken(false);
       const response = await axios.post(
         partialCalculatorURL,
         dataInputs,
@@ -332,6 +360,37 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     return true;
   };
 
+  const sendDetailsToStripe = async (cardElement, stripe) => {
+    window.log(`Creating card token`);
+    setBuyTokensIsLoading(true);
+    const token = await stripe.createToken(cardElement);
+    if (token.error) {
+      console.log("[error]", token.error);
+      return;
+    } else {
+      console.log("[PaymentMethod]", token.token);
+      window.log(`Sending token...`);
+      const stripePaymentURL =
+        "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/stripepayment";
+      const headers = {
+        "Content-Type": "application/json",
+      };
+      const data = {
+        token,
+      };
+      try {
+        const response = await axios.post(stripePaymentURL, data, headers);
+        setHasToken(true);
+        window.log(`Token response: ${JSON.stringify(response)}`);
+      } catch (error) {
+        window.log(`Error sending token to backend: ${error}`);
+        setTokenError("Error collecting card details, please try again later");
+      } finally {
+        setBuyTokensIsLoading(false);
+      }
+    }
+  };
+
   return {
     rValues,
     probabilities,
@@ -340,6 +399,9 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     error,
     notification,
     resultText,
+    buyTokensIsLoading,
+    hasToken,
+    tokenError,
     setError,
     setLoading,
     setNotification,
@@ -349,7 +411,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     checkRValues,
     checkProbabilities,
     submitData,
-    buyTokens,
+    sendDetailsToStripe,
   };
 };
 

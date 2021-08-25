@@ -38,6 +38,8 @@ export default function VendingMachine() {
     error: null,
     notification: null,
     resultText: "",
+    buyTokensIsLoading: false,
+    tokenError: null,
   });
 
   const InfoToolTip = "";

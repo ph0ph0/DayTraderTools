@@ -35,17 +35,9 @@ const BuyTokensButton = ({ api, ...props }) => {
     // each type of element.
     const cardElement = elements.getElement(CardElement);
 
+    // Move this over to API so that we can handle errors.
     // Use your card Element with other Stripe.js APIs
-    const { error, paymentMethod } = await stripe.createPaymentMethod({
-      type: "card",
-      card: cardElement,
-    });
-
-    if (error) {
-      console.log("[error]", error);
-    } else {
-      console.log("[PaymentMethod]", paymentMethod);
-    }
+    await api.sendDetailsToStripe(cardElement, stripe);
   };
 
   return (
@@ -60,7 +52,9 @@ const BuyTokensButton = ({ api, ...props }) => {
           <ModalHeader>Purchase Profit Tokens</ModalHeader>
           <ModalCloseButton />
           <ModalBody>Price: $4.99 for one token</ModalBody>
-          <ModalBody>1 token = 1 spin</ModalBody>
+          <ModalBody>
+            1 token = 1 spin (you can only buy one token at a time)
+          </ModalBody>
           <ModalBody fontSize={"0.8em"}>
             Unfortunately, we have to charge to run the calculator since the
             calculations are resource intensive!
@@ -86,20 +80,35 @@ const BuyTokensButton = ({ api, ...props }) => {
           <ModalBody fontSize={"0.6em"}>
             Please note that we use Stripe to securely collect payments.
           </ModalBody>
-          <ModalFooter>
-            <Button
-              colorScheme="green"
-              mr={3}
-              onClick={(event) => handleSubmit(event)}
-            >
-              Submit
-            </Button>
-          </ModalFooter>
+          <Box
+            display={"flex"}
+            flexDirection={"row"}
+            justifyContent={"space-between"}
+            alignItems={"center"}
+          >
+            <TokenNotificationText>Hey there</TokenNotificationText>
+            <ModalFooter>
+              <Button
+                colorScheme="green"
+                mr={3}
+                onClick={(event) => handleSubmit(event)}
+                disabled={api.buyTokensIsLoading}
+              >
+                {api.buyTokensIsLoading ? "Loading..." : "Submit"}
+              </Button>
+            </ModalFooter>
+          </Box>
         </ModalContent>
       </Modal>
     </>
   );
 };
+
+const TokenNotificationText = styled.p`
+  margin-left: 5%;
+  font-size: medium;
+  color: ${(props) => props.api.tokenError};
+`;
 
 const ActionButton = styled.button`
   width: 125px;
