@@ -12,12 +12,10 @@ const PartialCalculatorAPI = ({ state, setState }) => {
   const resultText = state.resultText;
   const buyTokensIsLoading = state.buyTokensIsLoading;
   const tokenError = state.tokenError;
+  const hasToken = state.hasToken;
 
   // (semi) private var
-  var hasToken = false;
-  const setHasToken = (value) => {
-    hasToken = value;
-  };
+  var privatePaymentToken = null;
 
   const setLoading = (value) => {
     setState((prevState) => {
@@ -29,7 +27,6 @@ const PartialCalculatorAPI = ({ state, setState }) => {
   };
 
   const setBuyTokensIsLoading = (value) => {
-    window.log(`buy tokens is loading`);
     setState((prevState) => {
       return {
         ...prevState,
@@ -52,6 +49,19 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       return {
         ...prevState,
         tokenError: value,
+      };
+    });
+  };
+
+  const setPrivatePaymentTokenValue = (tokenValue) => {
+    privatePaymentToken = tokenValue;
+    setError(null);
+    const hasTokenBool = !!tokenValue;
+    window.log(`hasTokenBool: ${hasTokenBool}`);
+    setState((prevState) => {
+      return {
+        ...prevState,
+        hasToken: hasTokenBool,
       };
     });
   };
@@ -122,12 +132,17 @@ const PartialCalculatorAPI = ({ state, setState }) => {
 
     // Lambda request receiver endpoint
     const partialCalculatorURL =
-      "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/partialoptimiserlambda";
+      "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/partialoptimiserlambdaz";
     const pollingURL =
       "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/pollingresource";
 
     //trim the white space either side of the strings, convert to floats.
     // Convert comma separated values into an array of floats.
+
+    if (!hasToken) {
+      setError("Please purchase a token");
+      return;
+    }
 
     // Check input values
     if (!checkProbabilities(probabilities) || !checkRValues(rValues)) return;
@@ -185,7 +200,6 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     var queryID;
     try {
       setLoading(true);
-      setHasToken(false);
       const response = await axios.post(
         partialCalculatorURL,
         dataInputs,
@@ -223,6 +237,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       window.log(`rFLOATSBJKKJHKLBJ: ${rFloats.length}`);
       setLoading(false);
       setNotification(null);
+      setPrivatePaymentTokenValue(null);
       setState((prevState) => {
         return {
           ...prevState,
@@ -234,6 +249,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       setLoading(false);
       setError(`Contact admin: ${error}`);
       setNotification(null);
+      setPrivatePaymentTokenValue(privatePaymentToken);
       window.log(`Error hitting API: ${error}`);
       return;
     }
@@ -363,32 +379,59 @@ const PartialCalculatorAPI = ({ state, setState }) => {
   const sendDetailsToStripe = async (cardElement, stripe) => {
     window.log(`Creating card token`);
     setBuyTokensIsLoading(true);
-    const token = await stripe.createToken(cardElement);
-    if (token.error) {
-      console.log("[error]", token.error);
-      return;
-    } else {
-      console.log("[PaymentMethod]", token.token);
-      window.log(`Sending token...`);
-      const stripePaymentURL =
-        "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/stripepayment";
-      const headers = {
-        "Content-Type": "application/json",
-      };
-      const data = {
-        token,
-      };
-      try {
-        const response = await axios.post(stripePaymentURL, data, headers);
-        setHasToken(true);
-        window.log(`Token response: ${JSON.stringify(response)}`);
-      } catch (error) {
-        window.log(`Error sending token to backend: ${error}`);
-        setTokenError("Error collecting card details, please try again later");
-      } finally {
-        setBuyTokensIsLoading(false);
+
+    const stripePaymentURL =
+      "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/stripepayment";
+    const headers = {
+      "Content-Type": "application/json",
+    };
+
+    try {
+      const intentSecret = await axios.post(stripePaymentURL, null, headers);
+      window.log(`Got intentSecret: ${JSON.stringify(intentSecret)}`);
+      if (intentSecret.data.statusCode == 200) {
+        // setPrivatePaymentTokenValue(token);
+        const paymentIntentsecret =
+          intentSecret.data.body.paymentIntent.client_secret;
+        const token = intentSecret.data.body.token;
+        window.log(`Got token: ${token}`);
+        const paymentResponse = await stripe.confirmCardPayment(
+          `${paymentIntentsecret}`,
+          {
+            payment_method: { card: cardElement },
+          }
+        );
+        setPrivatePaymentTokenValue(token);
+        if (paymentResponse.error) {
+          console.log("[error]", token.error);
+          setBuyTokensIsLoading(false);
+          return;
+        } else {
+          window.log(`Finished card payment`);
+        }
       }
+    } catch (error) {
+      window.log(`Error with card payment: ${error}`);
+      setTokenError("Error collecting card details, please try again later");
+    } finally {
+      setBuyTokensIsLoading(false);
     }
+
+    // ______
+
+    // const token = await stripe.createToken(cardElement);
+    // if (token.error) {
+    //   console.log("[error]", token.error);
+    //   setBuyTokensIsLoading(false);
+    //   return;
+    // } else {
+    //   console.log("[PaymentMethod]", token.token);
+    //   window.log(`Sending token...`);
+    //
+    //   const data = {
+    //     token,
+    //   };
+    // }
   };
 
   return {

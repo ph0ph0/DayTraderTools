@@ -83,16 +83,25 @@ const BuyTokensButton = ({ api, ...props }) => {
           <Box
             display={"flex"}
             flexDirection={"row"}
-            justifyContent={"space-between"}
+            justifyContent={"flex-end"}
             alignItems={"center"}
           >
-            <TokenNotificationText>Hey there</TokenNotificationText>
+            {api.hasToken && (
+              <TokenNotificationText errorText={false}>
+                You have one token!
+              </TokenNotificationText>
+            )}
+            {api.tokenError && (
+              <TokenNotificationText errorText={true}>
+                {api.tokenError}
+              </TokenNotificationText>
+            )}
             <ModalFooter>
               <Button
                 colorScheme="green"
                 mr={3}
                 onClick={(event) => handleSubmit(event)}
-                disabled={api.buyTokensIsLoading}
+                disabled={api.buyTokensIsLoading || api.hasToken}
               >
                 {api.buyTokensIsLoading ? "Loading..." : "Submit"}
               </Button>
@@ -107,7 +116,7 @@ const BuyTokensButton = ({ api, ...props }) => {
 const TokenNotificationText = styled.p`
   margin-left: 5%;
   font-size: medium;
-  color: ${(props) => props.api.tokenError};
+  color: ${(props) => (props.errorText ? "red" : "green")};
 `;
 
 const ActionButton = styled.button`
