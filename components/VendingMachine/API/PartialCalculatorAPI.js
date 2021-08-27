@@ -401,13 +401,16 @@ const PartialCalculatorAPI = ({ state, setState }) => {
             payment_method: { card: cardElement },
           }
         );
-        setPrivatePaymentTokenValue(token);
         if (paymentResponse.error) {
           console.log("[error]", token.error);
           setBuyTokensIsLoading(false);
+          setTokenError(
+            "Error collecting card details, please try again later"
+          );
           return;
         } else {
           window.log(`Finished card payment`);
+          setPrivatePaymentTokenValue(token);
         }
       }
     } catch (error) {
