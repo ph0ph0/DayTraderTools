@@ -75,6 +75,15 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     });
   };
 
+  const resetStripeNotifications = () => {
+    setState((prevState) => {
+      return {
+        ...prevState,
+        tokenError: null,
+      };
+    });
+  };
+
   const resetAll = () => {
     setState((prevState) => {
       return {
@@ -132,7 +141,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
 
     // Lambda request receiver endpoint
     const partialCalculatorURL =
-      "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/partialoptimiserlambdaz";
+      "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/partialoptimiserlambda";
     const pollingURL =
       "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/pollingresource";
 
@@ -199,6 +208,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     // Send data to cloud
     var queryID;
     try {
+      window.log(`Sending data to request receiver lambda`);
       setLoading(true);
       const response = await axios.post(
         partialCalculatorURL,
@@ -249,7 +259,8 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       setLoading(false);
       setError(`Contact admin: ${error}`);
       setNotification(null);
-      setPrivatePaymentTokenValue(privatePaymentToken);
+      // Token is not spent if error
+      // setPrivatePaymentTokenValue(privatePaymentToken);
       window.log(`Error hitting API: ${error}`);
       return;
     }
@@ -379,6 +390,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
   const sendDetailsToStripe = async (cardElement, stripe) => {
     window.log(`Creating card token`);
     setBuyTokensIsLoading(true);
+    resetStripeNotifications();
 
     const stripePaymentURL =
       "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/stripepayment";

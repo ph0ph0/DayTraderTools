@@ -163,5 +163,7 @@ describe("input checkers", () => {
     );
     resetTests();
   });
-  it("checks that each probability is less than 100%");
 });
+
+// Need to add tests for resetting the token if the api fails
+// Test for setting the token error and error fields
