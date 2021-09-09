@@ -413,11 +413,14 @@ const PartialCalculatorAPI = ({ state, setState }) => {
             payment_method: { card: cardElement },
           }
         );
+        window.log(
+          `Stripe Payment response: ${JSON.stringify(paymentResponse)}`
+        );
         if (paymentResponse.error) {
           console.log("[error]", token.error);
           setBuyTokensIsLoading(false);
           setTokenError(
-            "Error collecting card details, please try again later"
+            `Error please try again later: ${paymentResponse.error.code}`
           );
           return;
         } else {
