@@ -55,9 +55,8 @@ const PartialCalculatorAPI = ({ state, setState }) => {
 
   const setPrivatePaymentTokenValue = (tokenValue) => {
     privatePaymentToken = tokenValue;
-    setError(null);
-    const hasTokenBool = !!tokenValue;
-    window.log(`hasTokenBool: ${hasTokenBool}`);
+    window.log(`****PrivatePaymentToken: ${privatePaymentToken}`);
+    const hasTokenBool = tokenValue == null ? false : true;
     setState((prevState) => {
       return {
         ...prevState,
@@ -124,6 +123,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
 
   const submitData = async () => {
     window.log(`Calculating partials for p: ${probabilities}, r: ${rValues}`);
+    window.log(`pPT: ${privatePaymentToken}`);
     if (windowIsOpen) {
       window.log(`Closing window in submit`);
       setState((prevState) => {
@@ -139,6 +139,21 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     }
     resetAll();
 
+    if (!hasToken) {
+      window.log(
+        `User has no token. hasToken: ${hasToken}, pPT: ${privatePaymentToken}`
+      );
+      setError("Please purchase a token");
+      return;
+    }
+    if (privatePaymentToken == null) {
+      window.log(
+        `2) User has no token. hasToken: ${hasToken}, pPT: ${privatePaymentToken}`
+      );
+      setError("Please purchase a token");
+      return;
+    }
+
     // Lambda request receiver endpoint
     const partialCalculatorURL =
       "https://fecu0p7sjj.execute-api.eu-west-2.amazonaws.com/test/partialoptimiserlambda";
@@ -147,11 +162,6 @@ const PartialCalculatorAPI = ({ state, setState }) => {
 
     //trim the white space either side of the strings, convert to floats.
     // Convert comma separated values into an array of floats.
-
-    if (!hasToken) {
-      setError("Please purchase a token");
-      return;
-    }
 
     // Check input values
     if (!checkProbabilities(probabilities) || !checkRValues(rValues)) return;
@@ -402,7 +412,6 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       const intentSecret = await axios.post(stripePaymentURL, null, headers);
       window.log(`Got intentSecret: ${JSON.stringify(intentSecret)}`);
       if (intentSecret.data.statusCode == 200) {
-        // setPrivatePaymentTokenValue(token);
         const paymentIntentsecret =
           intentSecret.data.body.paymentIntent.client_secret;
         const token = intentSecret.data.body.token;

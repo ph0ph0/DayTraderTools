@@ -43,8 +43,6 @@ export default function VendingMachine() {
     hasToken: false,
   });
 
-  const InfoToolTip = "";
-
   return (
     <Center
       // Container for the entire vending machine
