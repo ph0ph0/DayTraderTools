@@ -12,10 +12,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
   const resultText = state.resultText;
   const buyTokensIsLoading = state.buyTokensIsLoading;
   const tokenError = state.tokenError;
-  const hasToken = state.hasToken;
-
-  // (semi) private var
-  var privatePaymentToken = null;
+  const privatePaymentToken = state.privatePaymentToken;
 
   const setLoading = (value) => {
     setState((prevState) => {
@@ -54,13 +51,11 @@ const PartialCalculatorAPI = ({ state, setState }) => {
   };
 
   const setPrivatePaymentTokenValue = (tokenValue) => {
-    privatePaymentToken = tokenValue;
-    window.log(`****PrivatePaymentToken: ${privatePaymentToken}`);
-    const hasTokenBool = tokenValue == null ? false : true;
+    window.log(`****PrivatePaymentToken: ${JSON.stringify(tokenValue)}`);
     setState((prevState) => {
       return {
         ...prevState,
-        hasToken: hasTokenBool,
+        privatePaymentToken: tokenValue,
       };
     });
   };
@@ -139,17 +134,8 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     }
     resetAll();
 
-    if (!hasToken) {
-      window.log(
-        `User has no token. hasToken: ${hasToken}, pPT: ${privatePaymentToken}`
-      );
-      setError("Please purchase a token");
-      return;
-    }
-    if (privatePaymentToken == null) {
-      window.log(
-        `2) User has no token. hasToken: ${hasToken}, pPT: ${privatePaymentToken}`
-      );
+    if (!privatePaymentToken) {
+      window.log(`User has no token: pPT: ${privatePaymentToken}`);
       setError("Please purchase a token");
       return;
     }
@@ -210,6 +196,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
       R: rFloats,
       P_AtR: probFloats,
       total_shares: 1000,
+      token: privatePaymentToken,
     };
     const headers = {
       "Content-Type": "application/json",
@@ -226,8 +213,12 @@ const PartialCalculatorAPI = ({ state, setState }) => {
         headers
       );
       window.log(`Response: ${JSON.stringify(response)}`);
+      if (response["data"]["statusCode"] == 500) {
+        throw response["data"]["body"];
+      }
       const body = JSON.parse(response["data"]["body"]);
       window.log(`body: ${JSON.stringify(body)}`);
+      // Check the ids match so we aren't querying the wrong entry
       queryID = body["id"];
       if (dataInputs.id != queryID) {
         throw "database id is not the same as sent id";
@@ -415,7 +406,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
         const paymentIntentsecret =
           intentSecret.data.body.paymentIntent.client_secret;
         const token = intentSecret.data.body.token;
-        window.log(`Got token: ${token}`);
+        window.log(`!!!!!!Got token: ${JSON.stringify(token)}`);
         const paymentResponse = await stripe.confirmCardPayment(
           `${paymentIntentsecret}`,
           {
@@ -436,10 +427,12 @@ const PartialCalculatorAPI = ({ state, setState }) => {
           window.log(`Finished card payment`);
           setPrivatePaymentTokenValue(token);
         }
+      } else if (intentSecret.data.statusCode == 500) {
+        throw intentSecret.data.body;
       }
     } catch (error) {
       window.log(`Error with card payment: ${error}`);
-      setTokenError("Error collecting card details, please try again later");
+      setTokenError(`Error with card payment: ${error}`);
     } finally {
       setBuyTokensIsLoading(false);
     }
@@ -470,7 +463,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
     notification,
     resultText,
     buyTokensIsLoading,
-    hasToken,
+    privatePaymentToken,
     tokenError,
     setError,
     setLoading,

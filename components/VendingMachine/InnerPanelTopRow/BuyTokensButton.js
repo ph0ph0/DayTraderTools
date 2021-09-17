@@ -86,7 +86,7 @@ const BuyTokensButton = ({ api, ...props }) => {
             justifyContent={"flex-end"}
             alignItems={"center"}
           >
-            {api.hasToken && (
+            {api.privatePaymentToken && (
               <TokenNotificationText errorText={false}>
                 You have one token!
               </TokenNotificationText>
@@ -101,7 +101,7 @@ const BuyTokensButton = ({ api, ...props }) => {
                 colorScheme="green"
                 mr={3}
                 onClick={(event) => handleSubmit(event)}
-                disabled={api.buyTokensIsLoading || api.hasToken}
+                disabled={api.buyTokensIsLoading || api.privatePaymentToken}
               >
                 {api.buyTokensIsLoading ? "Loading..." : "Submit"}
               </Button>

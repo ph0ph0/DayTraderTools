@@ -40,7 +40,7 @@ export default function VendingMachine() {
     resultText: "",
     buyTokensIsLoading: false,
     tokenError: null,
-    hasToken: false,
+    privatePaymentToken: null,
   });
 
   return (
