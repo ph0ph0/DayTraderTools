@@ -406,7 +406,7 @@ const PartialCalculatorAPI = ({ state, setState }) => {
         const paymentIntentsecret =
           intentSecret.data.body.paymentIntent.client_secret;
         const token = intentSecret.data.body.token;
-        window.log(`!!!!!!Got token: ${JSON.stringify(token)}`);
+        window.log(`!!!!!!Got tokenn: ${JSON.stringify(token)}`);
         const paymentResponse = await stripe.confirmCardPayment(
           `${paymentIntentsecret}`,
           {
