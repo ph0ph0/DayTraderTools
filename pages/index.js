@@ -9,7 +9,7 @@ import "../devConfig.config";
 import { Flex } from "@chakra-ui/layout";
 import ComingSoon from "../components/ComingSoon/ComingSoon";
 
-export default function Home() {
+export default function Home() { 
   return (
     <Flex
       borderWidth="1px"
