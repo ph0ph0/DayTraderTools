@@ -2,7 +2,7 @@
 
 # Day Trader Tools
 
-This was a side-project that I created in order to address crucial profitability issues in discretionary trading - when to take partials and at what return factor. The gif above shows the fully working example, though the project was never launched due to other commitments.
+This was a side-project that I created in order to address crucial profitability issues in discretionary trading - when to take partials and at what return factor. The gif above shows the fully working example.
 
 Partialling in trading (aka partial profit taking) is the act of partially closing a trade in order to capture profits, whilst still holding some shares in case the trade moves further in the trade's favour. 
 
